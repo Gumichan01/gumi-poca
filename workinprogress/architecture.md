@@ -35,6 +35,10 @@ Les questionnaires peuvent avoir de multiples formes. Il peut s'agir simplement 
 
 ## Description de l'architecture
 
+### Diagramme de cas d'utilisations
+
+*Insérer ici .png du diagramme de cas d'utilisations*
+
 ### Diagramme de classes
 
 *Insérer ici .png du diagramme de classes final*
