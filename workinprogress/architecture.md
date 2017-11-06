@@ -7,7 +7,7 @@ Les évaluations se feront au moyens de questionnaires réalisés par les enseig
 Les utilisateurs ne doivent pouvoir réaliser que ce que leur statut leur permet. Par exemple, un étudiant ne peut en noter un autre et un enseignant ne peut répondre à un questionnaire.
 Enfin, *evaluator* prendra l'aspect d'un service web facile d'utilisation à destination d'universités ou encore d'entreprises. Il doit donc respecter une conception client/serveur de type REST : l'interface utilisateur accessible par le client est séparée de celle du stockage des données.
 
-La plateforme doit donc respecter un certain nombre d'objectifs, aussi bien pour ses utilisateurs que pour ses concepteurs :
+La plateforme doit donc respecter un certain nombre d'objectifs, que ce soit pourses utilisateurs ou même pour ses concepteurs :
 
   * extensibilité : l'ajout de fonctionnalités utilisateur doit pouvoir se faire aisément.
   * modularité : l'extensibilité pourra être accomplie en partie grâce à la modularité du code de notre plateforme.
@@ -35,16 +35,30 @@ Les questionnaires peuvent avoir de multiples formes. Il peut s'agir simplement 
 
 ## Description de l'architecture
 
+*Les diagrammes ci-dessous ne sont pas finaux.*
+
 ### Diagramme de cas d'utilisations
 
-*Insérer ici .png du diagramme de cas d'utilisations*
+![Diagramme Use Case](DiagrammeUseCase.png)
+
+Le diagramme de cas d'utilisations recense ce que l'on a énoncé précédemment.
+
+Les acteurs du système seront principalement les étudiants et les enseignants.
+
+Se connecter au système n'est pas essentiel pour accéder à la plateforme mais essentiel pour y participer car il nous faut identifier qui crée les cours et qui y participent.
+
+Certaines actions sont bien évidemment dépendantes d'autres : un étudiant ne peut voir ses notes que s'il a participé à un questionnaire, et il ne peut participer à un questionnaire que s'il est inscrit à un cours. Ce dernier n'existe que si un enseignant l'a crée.
 
 ### Diagramme de classes
 
-*Insérer ici .png du diagramme de classes final*
+![Diagramme de classe](DiagrammeClasses.png)
+
+Le *point d'entrée du diagramme* est la classe **Serveur**. Cette dernière s'instancie à la création du programme et permet d'accéder aux différentes ressources accessibles pour gérer le programme.
 
 ## Extensions envisagées
 
-*Discuter des extensions envisagées*
-- Dépôt de code source.
-- Question contenant des médias.
+Comme extension, nous envisageons de rendre les questionnaires plus vivants et interactifs en laissant la possibilité aux étudiants de soumettre des réponses plus évoluées que des choix prédéterminés.
+
+Nous pouvons leur laisser la possibilité de soumettre directement un code source qui peut éventuellement être évalué. Ceci est rendu possible avec notre architecture actuelle car l'entité *Réponse* est destinée à être étendue. Nous pourrions créer une sous classe *ReponseCodeSource* qui s'attend à ce que l'étudiant soumette un code source dans un langage donné.
+
+Par ailleurs, nous pouvons aussi proposer des questions avec médias, ces médias pouvant être des sons, vidéos ou bien autres. Cela est encore rendu possible grâce à l'existence de *ReponseMedia* qui peut contenir éventuellement plusieurs médias (classe *Media*) et ces derniers seront chargés et affichés dans le questionnaire.
