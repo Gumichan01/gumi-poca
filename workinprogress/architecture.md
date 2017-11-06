@@ -3,8 +3,11 @@
 ## Interprétation du sujet
 
 Le projet *evaluator* consiste en la conception d'une plateforme d'évaluation automatique pour un personnel enseignant.
+
 Les évaluations se feront au moyens de questionnaires réalisés par les enseignants. Ces même questionnaires pourront dans leur nature être aussi variés que possibles.
+
 Les utilisateurs ne doivent pouvoir réaliser que ce que leur statut leur permet. Par exemple, un étudiant ne peut en noter un autre et un enseignant ne peut répondre à un questionnaire.
+
 Enfin, *evaluator* prendra l'aspect d'un service web facile d'utilisation à destination d'universités ou encore d'entreprises. Il doit donc respecter une conception client/serveur de type REST : l'interface utilisateur accessible par le client est séparée de celle du stockage des données.
 
 La plateforme doit donc respecter un certain nombre d'objectifs, que ce soit pourses utilisateurs ou même pour ses concepteurs :
