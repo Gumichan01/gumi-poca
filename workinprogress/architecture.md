@@ -56,7 +56,13 @@ Certaines actions sont bien évidemment dépendantes d'autres : un étudiant ne 
 
 ![Diagramme de classe](DiagrammeClasses.png)
 
-Le *point d'entrée du diagramme* est la classe **Serveur**. Cette dernière s'instancie à la création du programme et permet d'accéder aux différentes ressources accessibles pour gérer le programme.
+Le *point d'entrée du diagramme* est la classe **Serveur**. Cette dernière s'instancie à la création du programme et permet d'accéder aux différentes ressources accessibles pour gérer le programme tels la liste des utilisateurs ou la liste des cours disponibles.
+
+La classe *Cours* comme son nom l'indique contiendra les informations sur les différents cours. Ils sont crées par les enseignants et sont composés eux mêmes de *Questionnaires*. Ces derniers sont composés de *Questions* qui est une classe abstraite : on trouvera le plus souvent sa sous-classe *QuestionChoixMultiple*.
+
+Cela permet de générer des questionnaires variés qui peuvent comporter plusieurs parties dont une composée de questions à choix multiples et d'autres avec *Media* (voir partie Extensions).
+
+Les médias quant à eux correspondent à des ressources stockées localement sur le serveur et qui rendent les questionnaires plus interactifs. Ils peuvent être liés à une question (où l'utilisateur pourrait sélectionner le média étant la bonne réponse) ou même à une réponse de l'utilisateur qui fournirait son média en tant que réponse finale (si le devoir demande d'uploader une image ou un fichier vidéo)..
 
 ## Extensions envisagées
 
