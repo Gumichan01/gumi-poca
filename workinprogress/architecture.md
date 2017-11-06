@@ -46,3 +46,5 @@ Les questionnaires peuvent avoir de multiples formes. Il peut s'agir simplement 
 ## Extensions envisagées
 
 *Discuter des extensions envisagées*
+- Dépôt de code source.
+- Question contenant des médias.
