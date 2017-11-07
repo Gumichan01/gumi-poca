@@ -5,7 +5,8 @@ DIR=../bin/
 FLAG=-d .
 SRC=$(shell ls *.scala)
 
-compile: $(SRC:.scala=.class)
+# I put the classes in order of dependency
+all: Answer.class Question.class Survey.class
 
 %.class: %.scala
 	@echo "Compiling $*.scala.."
