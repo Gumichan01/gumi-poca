@@ -42,7 +42,7 @@ Les questionnaires peuvent avoir de multiples formes. Il peut s'agir simplement 
 
 ### Diagramme de cas d'utilisations
 
-![Diagramme Use Case](DiagrammeUseCase.png)
+![Diagramme Use Case](Diagrammes/DiagrammeUseCase.png)
 
 Le diagramme de cas d'utilisations recense ce que l'on a énoncé précédemment.
 
@@ -54,7 +54,7 @@ Certaines actions sont bien évidemment dépendantes d'autres : un étudiant ne 
 
 ### Diagramme de classes
 
-![Diagramme de classe](DiagrammeClasses.png)
+![Diagramme de classe](Diagramme/DiagrammeClasses.png)
 
 Le *point d'entrée du diagramme* est la classe **Serveur**. Cette dernière s'instancie à la création du programme et permet d'accéder aux différentes ressources accessibles pour gérer le programme tels la liste des utilisateurs ou la liste des cours disponibles.
 
