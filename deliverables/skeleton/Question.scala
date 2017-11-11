@@ -22,11 +22,11 @@ object QMain {
 
     def main(args: Array[String]) : Unit = {
 
-        val l = List(new TextAnswer("yes"), new TextAnswer("no"));
-        val g = new TextAnswer("yes");
+        val l = List(new TextAnswer("yes",0), new TextAnswer("no",0));
+        val g = new TextAnswer("yes",0);
         val q = new MultipleChoiceQuestion("Are you stupid?", l, g);
         println(q.text);
-        println("expected false; got: " + (q isGoodAnswer (new TextAnswer("y"))));
+        println("expected false; got: " + (q isGoodAnswer (new TextAnswer("y", 0))));
         println("expected true; got: " + (q isGoodAnswer g));
     }
 }

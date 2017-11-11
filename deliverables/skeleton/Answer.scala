@@ -10,8 +10,11 @@ trait GenericAnswer[T]{
     def == (a: GenericAnswer[T]) : Boolean
 }
 
-class Answer    // Answer will contain Media, don't remove it
-case class TextAnswer(text: String) extends Answer with GenericAnswer[String] {
+class Answer(id_question : Int) {   // Answer will contain Media, don't remove it
+
+    def id = id_question
+}
+case class TextAnswer(text: String, idq: Int) extends Answer(idq) with GenericAnswer[String] {
 
     def content = text
     def == (a: GenericAnswer[String]) = content == a.content
