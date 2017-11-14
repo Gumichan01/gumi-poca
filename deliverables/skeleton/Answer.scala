@@ -4,20 +4,19 @@
 */
 
 // note: I didn't implemented MediaAnswer yet, I just want to test the base
-trait GenericAnswer[T]{
+trait ComparableAnswer[T]{
 
     def content : T
-    def == (a: GenericAnswer[T]) : Boolean
+    def == (a: ComparableAnswer[T]) : Boolean
 }
 
 class Answer(id_question : Int) {   // Answer will contain Media, don't remove it
 
     def id = id_question
-
     def toList() : List[Answer] = List(this)
 }
-case class TextAnswer(text: String, idq: Int) extends Answer(idq) with GenericAnswer[String] {
+case class TextAnswer(text: String, idq: Int) extends Answer(idq) with ComparableAnswer[String] {
 
     def content = text
-    def == (a: GenericAnswer[String]) = content == a.content
+    def == (a: ComparableAnswer[String]) = content == a.content
 }
