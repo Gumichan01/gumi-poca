@@ -20,7 +20,7 @@ class Survey(questionl: List[Question]) {
 
         answerl match {
 
-            case h::q => check_(q, (if (questionl(h.id) isGoodAnswer h)  (acc + 1) else acc ) )
+            case h::q => check_(q, (if (questionl(h.id) isGoodAnswer h) (acc + 1) else acc ) )
             case _    => acc
         }
     }
