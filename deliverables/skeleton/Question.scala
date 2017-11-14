@@ -21,7 +21,7 @@ case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], gansw
     }
 
     // Methods
-    def isGoodAnswer (a: List[Answer]) : Boolean = a == ganswer
+    def isGoodAnswer (a: List[Answer]) : Boolean = a.toSet == ganswer.toSet
 }
 
 object QMain {
