@@ -67,4 +67,22 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+### PlayFramework ###
+# Ignore Play! working directory #
+bin/
+/db
+.eclipse
+/lib/
+/logs/
+/modules
+/project/project
+/project/target
+/target
+tmp/
+test-result
+server.pid
+*.eml
+/dist/
+.cache
+
 # End of https://www.gitignore.io/api/osx,linux,windows
