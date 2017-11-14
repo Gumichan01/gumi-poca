@@ -13,6 +13,8 @@ trait GenericAnswer[T]{
 class Answer(id_question : Int) {   // Answer will contain Media, don't remove it
 
     def id = id_question
+
+    def toList() : List[Answer] = List(this)
 }
 case class TextAnswer(text: String, idq: Int) extends Answer(idq) with GenericAnswer[String] {
 
