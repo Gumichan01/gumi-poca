@@ -2,11 +2,11 @@
 
 CC=fsc
 DIR=../bin/
-FLAG=-d .
+FLAG=-d . -unchecked
 SRC=$(shell ls *.scala)
 
 # I put the classes in order of dependency
-all: Answer.class Question.class Survey.class
+all: Answer.class AnswerSheet.class Question.class Survey.class
 
 %.class: %.scala
 	@echo "Compiling $*.scala.."
