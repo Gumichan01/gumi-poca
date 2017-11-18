@@ -1,13 +1,12 @@
-import scala.collection.mutable.ListBuffer
 
 class AnswerSheet {
 
-    private var answers = new ListBuffer[(Answer, Int)]
+    private var answers : List[(Answer, Int)] = List()
 
     // Constructor
 
     def addAnswer(a : Answer, qid: Int) : Unit = {
-        answers = answers ++: ListBuffer((a, qid))
+        answers = answers ++: List((a, qid))
     }
     def getAnswers = answers
 }
