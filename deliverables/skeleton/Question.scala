@@ -2,9 +2,16 @@
     Question.scala: related to the question
 */
 
+object Qid {
+    private var pqid : Int = 0
+    val _id : Int = { pqid = pqid + 1; pqid}
+}
+
 abstract class Question(sentence: String) {
 
+    private val idq = Qid._id
     def text : String = sentence;
+    def id : Int = idq
     def isGoodAnswer (a: List[Answer]) : Boolean
 }
 case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], ganswer: List[Answer])
@@ -28,11 +35,11 @@ object QMain {
 
     def main(args: Array[String]) : Unit = {
 
-        val l = List(new TextAnswer("yes",0), new TextAnswer("no",0));
-        val g = new TextAnswer("yes",0);
-        val q = new MultipleChoiceQuestion("Are you stupid?", l, g.toList);
+        val l = List(new TextAnswer("yes"), new TextAnswer("no"));
+        val g = new TextAnswer("yes");
+        val q = new MultipleChoiceQuestion("Are you stupid?", l, List(g));
         println(q.text);
-        println("expected false; got: " + (q isGoodAnswer (new TextAnswer("y", 0)).toList));
-        println("expected true; got: " + (q isGoodAnswer g.toList));
+        println("expected false; got: " + (q isGoodAnswer List(new TextAnswer("y")) ) );
+        println("expected true; got: " + (q isGoodAnswer List(g)));
     }
 }
