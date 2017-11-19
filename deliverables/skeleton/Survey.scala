@@ -3,10 +3,18 @@
   Questionnaire
 */
 
+object Sid {
+    private var psid : Int = 0
+    val _id : Int = { psid = psid + 1; psid}
+}
+
 class Survey(questionl: List[Question]) {
 
     if(questionl.isEmpty)
         throw new IllegalArgumentException("A survey cannot be empty")
+
+    private val ids = Sid._id
+    def id : Int = ids
 
     private def getQuestion(ql : List[Question], id: Int) : Question = {
 
