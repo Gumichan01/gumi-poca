@@ -6,7 +6,7 @@ FLAG=-d . -unchecked
 SRC=$(shell ls *.scala)
 
 # I put the classes in order of dependency
-all: Answer.class AnswerSheet.class Question.class Survey.class
+all: Answer.class AnswerSheet.class Question.class Survey.class Course.class User.class Serveur.class
 
 %.class: %.scala
 	@echo "Compiling $*.scala.."
