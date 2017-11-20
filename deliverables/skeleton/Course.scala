@@ -1,48 +1,42 @@
-//
-//  Course
-//  evaluator
-//
-//  Created by Yves VIAUD on 11/11/2017.
-//
-
-import scala.collection.mutable.ArrayBuffer
-
-// We don't know yet how our teammates will model their classes
-// So I'm using traits to synthesize what I'll need at least
-
-trait IdentifiableObject {
-  val identifier: String
+/*
+ * A course contains a set of Survey
+ */
+object Cid{
+    private var pcid : Int = 0;
+    val _id : Int = { pcid = pcid + 1; pcid};
 }
+class Course(nom:String,survl: List[Survey], cont: String, idProf: Int, listStudent: List[Int]) {
+  private val name = nom;
+  private val idC = Cid._id;
+  private var surveyl = survl;
+  private var content =cont;
+  private var idP = idProf;
+  private var listS = listStudent;
 
-trait User extends IdentifiableObject
-trait Teacher extends User
-
-trait Survey extends IdentifiableObject
-
-// Class
-
-class Course(val name: String, val owner: Teacher) {
-  val identifier = "[Some generated identifier]" // using a helper tool
-
-  val surveys = ArrayBuffer.empty[Survey]
-
-  override def toString() : String = {
-    return "Course " + identifier + " with " + surveys.length + " surveys"
+  def getSurvey(surveyl: List[Survey], id: Int): Survey = {
+    if(id<0){
+      throw new IllegalArgumentException("Numbre of survey invalide");
+    }
+    surveyl match {
+      case Nil => println("This course doesn't have question"); return null;
+      case h::t => if(h.id==id) h else getSurvey(t,id);
+    }
+    return null;
   }
-}
-
-object Main {
-  def main(args: Array[String]) : Unit = {
-    val aTeacher = new Teacher { val identifier = "T21510111" }
-
-    val aSurvey = new Survey { val identifier = "Q101" }
-    val anotherSurvey = new Survey { val identifier = "Q201" }
-
-    val aCourse = new Course("POOCAv", aTeacher)
-
-    aCourse.surveys.append(aSurvey)
-    aCourse.surveys.append(anotherSurvey)
-
-    println(aCourse)
+  
+  def addSurvey(s: Survey) = {
+    surveyl.+:(s);
+  }
+  def removeSurvey(s:Survey)={
+    surveyl.filterNot(elem=> elem ==s);
+  }
+  def addStudent(i: Int)={
+    listS.+:(i);
+  }
+  def removeStudent(i: Int)={
+    listS.filterNot(elem=>elem==i);
+  }
+  def addContent(cont : String) ={
+    content = cont;
   }
 }
