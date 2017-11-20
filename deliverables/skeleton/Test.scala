@@ -1,6 +1,8 @@
+/*
+* Test pour les classes
+*/
 
-
-class Serveur {
+object Test {
   def main(args: Array[String]) : Unit = {
     var q1 = "Result for 1+1:";
     var poly = "0+1=1; 1+1=2";
