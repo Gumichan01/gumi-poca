@@ -57,7 +57,6 @@ case class MCSurvey(questionl: List[MultipleChoiceQuestion]) extends Survey(ques
             case _  => acc
         }   // match
     }
-
 }
 
 object SMain{
