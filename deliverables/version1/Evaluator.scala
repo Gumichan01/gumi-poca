@@ -19,7 +19,6 @@ object Qevaluator {
             val n = StdIn.readInt()
 
             n match {
-
                 case 1 => createSurvey
                 case 2 => { quiz(lsurvey) match {
                         case None => println("Passing...")
@@ -40,10 +39,8 @@ object Qevaluator {
         var questions    : List[MultipleChoiceQuestion] = List()
 
         do {
-
             answers      = List()
             good_answers = List()
-            questions    = List()
 
             println("Write the first question:")
             val q = StdIn.readLine()
@@ -53,7 +50,6 @@ object Qevaluator {
 
             var i = 0
             for(a <- array) {
-
                 i = i + 1
                 println(i + ": " + a)
                 answers = answers ++: List[Answer](new TextAnswer(a))
@@ -63,15 +59,13 @@ object Qevaluator {
             val arint = StdIn.readLine().split('|')
 
             for(ga <- arint) {
-
                 good_answers = good_answers ++: List[Answer](answers(ga.toInt - 1))
             }
 
             println("Generate the question")
             val quest = new MultipleChoiceQuestion(q, answers, good_answers)
-            questions = questions ++: List[MultipleChoiceQuestion](quest)
+            questions = questions :+ quest
             println("Do want to write another question (y|n)?")
-
         } while(StdIn.readLine() == "y")
 
         println("Generate the survey")
