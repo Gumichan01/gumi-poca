@@ -109,7 +109,7 @@ object Qevaluator {
       var sheet = new AnswerSheet(s.id)
 
       for (question <- s.questionl) {
-        println("Question: question.text")
+        println("Question: " + question.text)
 
         var count = 0
 

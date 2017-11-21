@@ -2,6 +2,7 @@
     Question.scala: related to the question
 */
 
+/// BUG it seems that the id of a question is not unique (to fix)
 object Qid {
     private var pqid : Int = 0
     val _id : Int = { pqid = pqid + 1; pqid}
