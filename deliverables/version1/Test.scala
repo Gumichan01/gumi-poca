@@ -12,12 +12,20 @@ object Test {
     var ans4 = new TextAnswer("5");
     var prof = new Professor("Jean", "Pierre");
     var student = new Student("Michael","Fail");
-    
+
     var listAnswer: List[Answer] = List(ans1, ans2, ans3, ans4);
     var listGoodAnswer: List[Answer] = List(ans1);
     var question = new MultipleChoiceQuestion(q1, listAnswer, listGoodAnswer);
-    var survey = new Survey(List(question));
+    var survey = new MCSurvey(List(question));
     var cours = new Course("Math", List(survey), poly, prof.getID, List(student.getID));
-    cours.toString();
+    println(cours.toString());
+
+    var sheet = new AnswerSheet(survey.id);
+    sheet.addAnswer(ans1, question.id);
+    println(survey.check(sheet));
+
+    var sheet2 = new AnswerSheet(survey.id);
+    sheet2.addAnswer(ans3, question.id);
+    println(survey.check(sheet2));
   }
 }

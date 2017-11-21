@@ -8,15 +8,23 @@ object Sid {
     val _id : Int = { psid = psid + 1; psid}
 }
 
-class Survey(questionl: List[Question]) {
+trait WithCheckableQA {
+
+    def check(answer_sh: AnswerSheet) : Int
+}
+
+abstract class Survey(questionl: List[Question]) {
 
     if(questionl.isEmpty)
         throw new IllegalArgumentException("A survey cannot be empty")
 
     private val ids = Sid._id
     def id : Int = ids
+}
+case class MCSurvey(questionl: List[MultipleChoiceQuestion]) extends Survey(questionl) with WithCheckableQA {
 
-    private def getQuestion(ql : List[Question], id: Int) : Question = {
+    // Private
+    protected def getQuestion(ql : List[MultipleChoiceQuestion], id: Int) : MultipleChoiceQuestion = {
 
         if(id < 0)
             throw new IllegalArgumentException("A survey cannot be empty")
@@ -27,37 +35,27 @@ class Survey(questionl: List[Question]) {
         }
     }
 
-    // I am still thinking about how I should define and implement it
-    // Return the number of good answers
-    def check(answer_sh: AnswerSheet): (Int,Int) = {
+    // Public
+    def check(answer_sh: AnswerSheet) : Int = {
 
-        var res = (0,0);    // (good_answers, question_to_check_manually)
-        check_(answer_sh.getAnswers, res)
+        var acc = 0
+        check_(answer_sh.getAnswers, acc)
     }
 
-    private def check_(answerl : List[(Answer, Int)], acc : (Int,Int)) : (Int,Int) = {
+    private def check_(answerl : List[(Answer, Int)], acc : Int) : Int = {
 
-        val (g, nb) = acc
+        val g = acc
 
         answerl match {
 
             case (a, i)::q => {
 
                 val question = getQuestion(questionl, i)
-
-                question match {
-
-                    case MultipleChoiceQuestion(_,_,_) => {
-
-                        check_(q, (if (question isGoodAnswer List(a)) (g + 1, nb) else acc ))
-                    }
-
-                    case _ => check_(q, (g, nb + 1))
-                }   //match
-            }   // match
+                check_(q, (if (question isGoodAnswer List(a)) (g + 1) else acc ))
+            }
 
             case _  => acc
-        }
+        }   // match
     }
 }
 
