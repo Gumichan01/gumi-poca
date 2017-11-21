@@ -1,5 +1,5 @@
 
-class AnswerSheet {
+class AnswerSheet(ids: Int) {
 
     private var answers : List[(Answer, Int)] = List()
 

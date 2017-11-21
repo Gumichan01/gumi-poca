@@ -7,15 +7,18 @@ object Qid {
     val _id : Int = { pqid = pqid + 1; pqid}
 }
 
+trait QuestionWithCheckablaAnswer {
+    def isGoodAnswer (a: List[Answer]) : Boolean
+}
+
 abstract class Question(sentence: String) {
 
     private val idq = Qid._id
     def text : String = sentence;
     def id : Int = idq
-    def isGoodAnswer (a: List[Answer]) : Boolean
 }
 case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], ganswer: List[Answer])
-    extends Question(sentence) {
+    extends Question(sentence) with QuestionWithCheckablaAnswer {
 
     // Constructor
     ganswer match {
