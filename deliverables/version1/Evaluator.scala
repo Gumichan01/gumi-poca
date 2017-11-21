@@ -20,8 +20,13 @@ object Qevaluator {
             val n = StdIn.readInt()
 
             n match {
-                case 1 => println
-                case 2 => { val (g,t) = quiz; println(g + "/" + t) }
+                case 1 => println("")
+                case 2 => { quiz match {
+                        case None => println("Auccune réponse :/ !.")
+                        case Some((g,t)) => println(g+"/"+t); 
+                    }
+                }
+                     
                 case 3 => go = false
                 case _ => throw new IllegalArgumentException("invalid argument")
             }   // match
@@ -30,12 +35,14 @@ object Qevaluator {
 
     def createSurvey : Boolean = {
 
+
         return true
     }
 
-    def quiz : (Int,Int) = {
+    def quiz : Option[(Int,Int)] = {
 
-        return (0,0)
+
+        return Some((0,0)) 
     }
 
 }
