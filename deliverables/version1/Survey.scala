@@ -20,6 +20,10 @@ abstract class Survey(questionl: List[Question]) {
 
     private val ids = Sid._id
     def id : Int = ids
+
+    override def toString : String = {
+      "Survey with id = " + id
+    }
 }
 case class MCSurvey(questionl: List[MultipleChoiceQuestion]) extends Survey(questionl) with WithCheckableQA {
 
