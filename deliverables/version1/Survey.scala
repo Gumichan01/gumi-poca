@@ -6,7 +6,7 @@
 /// BUG it seems that the id of a survey is not unique (to fix)
 object Survey {
     private var psid : Int = 0
-    private val _id : Int = { psid += 1; psid}
+    private def getId : Int = { psid += 1; psid}
 }
 
 trait WithCheckableQA {
@@ -19,7 +19,7 @@ abstract class Survey(questionl: List[Question]) {
     if(questionl.isEmpty)
         throw new IllegalArgumentException("A survey cannot be empty")
 
-    private val ids = Survey._id
+    private val ids = Survey.getId
     def id : Int = ids
 
     override def toString : String = {
@@ -75,8 +75,8 @@ object SMain{
         var ans2 = new TextAnswer("3");
         var ans3 = new TextAnswer("4");
         var ans4 = new TextAnswer("5");
-        var prof = new Professor("Jean", "Pierre");
-        var student = new Student("Michael","Fail");
+        // var prof = new Professor("Jean", "Pierre");
+        // var student = new Student("Michael","Fail");
 
         var listAnswer: List[Answer] = List(ans1, ans2, ans3, ans4);
         var listGoodAnswer: List[Answer] = List(ans1);
