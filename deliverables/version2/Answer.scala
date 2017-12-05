@@ -10,9 +10,14 @@ trait ComparableAnswer[T]{
     def == (a: ComparableAnswer[T]) : Boolean
 }
 
-class Answer {} // Answer will contain Media, don't remove it
+class Answer;
+// Text answer
 case class TextAnswer(text: String) extends Answer with ComparableAnswer[String] {
 
     def content = text
     def == (a: ComparableAnswer[String]) = content == a.content
+}
+// Media Answer
+case class MediaAnswer extends Answer with ComparableAnswer[Media] {
+
 }
