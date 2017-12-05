@@ -3,7 +3,6 @@
   Questionnaire
 */
 
-/// BUG it seems that the id of a survey is not unique (to fix)
 object Survey {
     private var psid : Int = 0
     private def getId : Int = { psid += 1; psid}
