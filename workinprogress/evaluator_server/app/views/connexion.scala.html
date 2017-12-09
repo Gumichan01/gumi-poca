@@ -1,0 +1,29 @@
+@*
+ * This template takes a single argument, a String containing a
+ * message to display.
+ *@
+@(message: String)
+
+@*
+ * Call the `main` template with two arguments. The first
+ * argument is a `String` with the title of the page, the second
+ * argument is an `Html` object containing the body of the page.
+ *@
+@main("Evaluator - Connexion") {
+
+<div class="container-fluid">
+	<form>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Nom d'utilisateur</label>
+			<input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Entrez votre nom d'utilisateur">
+			<small id="usernameHelp" class="form-text text-muted">Le nom d'utilisateur que vous avez choisi lors de votre inscription.</small>
+		</div>
+		<div class="form-group">
+			<label for="exampleInputPassword1">Mot de passe</label>
+			<input type="password" class="form-control" id="password" placeholder="Mot de passe">
+		</div>
+  		<button type="submit" class="btn btn-primary">Connexion</button>
+	</form>
+</div>
+
+}

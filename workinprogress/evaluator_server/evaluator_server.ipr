@@ -15,6 +15,7 @@
         <entry key="evaluator_server">
           <value>
             <ProjectSettingsEntry>
+              <option name="sourceDir" value="$PROJECT_DIR$/app" />
               <option name="confDir" value="$PROJECT_DIR$/app" />
               <option name="playDistrPath" value="$USER_HOME$/.ivy2/cache/com.typesafe.play/play_2.12/jars/play_2.12-2.6.7.jar" />
               <option name="templateImports">
@@ -241,6 +242,15 @@
       <JAVADOC />
       <SOURCES>
         <root url="jar://$USER_HOME$/.ivy2/cache/com.googlecode.usc/jdbcdslog/srcs/jdbcdslog-1.0.6.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="SBT: com.h2database:h2:1.4.192:jar">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.h2database/h2/jars/h2-1.4.192.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.ivy2/cache/com.h2database/h2/srcs/h2-1.4.192-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="SBT: com.jolbox:bonecp:0.8.0.RELEASE:jar">
