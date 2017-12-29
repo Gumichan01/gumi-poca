@@ -1,12 +1,15 @@
 package controllers
 
 import javax.inject._
+
 import play.api.data._
 import play.api.data.Forms._
 import play.api.mvc._
 import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
+
+import scala.collection.mutable.ListBuffer
 
 // Course example class to test
 
@@ -58,6 +61,17 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
       "role" -> text
     )
   )
+
+  var list = {
+    val a = new ListBuffer[Int]()
+    a += 1
+    a
+  }
+
+  def test = Action {
+    list += (list.last + 1)
+    Ok(list.last.toString)
+  }
 
   // Authentification & Registration
 
