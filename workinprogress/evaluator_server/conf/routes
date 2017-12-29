@@ -15,8 +15,9 @@ GET     /count                      controllers.CountController.count
 GET     /message                    controllers.AsyncController.message
 
 # API
-# Authentification
+# Authentification / Register
 POST    /api/login                  controllers.ApiController.login
+POST    /api/registration           controllers.ApiController.registration
 
 # Courses
 GET     /api/courses/all            controllers.ApiController.listCourses

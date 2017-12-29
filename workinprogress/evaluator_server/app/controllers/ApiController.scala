@@ -44,21 +44,34 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
       (JsPath \ "id").read[Int](min(10))
     )(Course.apply _)
 
-  val userForm = Form(
+  val loginForm = Form(
     tuple(
       "username" -> text,
       "password" -> text
     )
   )
 
-  // Authentification
+  val registrationForm = Form(
+    tuple(
+      "username" -> text,
+      "password" -> text,
+      "role" -> text
+    )
+  )
+
+  // Authentification & Registration
 
   def login = Action { implicit request =>
-    val (username, password) = userForm.bindFromRequest.get
+    val (username, password) = loginForm.bindFromRequest.get
     println("Trying to login with " + username + ":" + password)
     Ok("Hello " + username + ", you're trying to login with: " + password)
     // Idéalement vérifier si les logins sont bons et rediriger avec
     // Redirect("path/location")
+  }
+
+  def registration = Action { implicit request =>
+    val (username, password, role) = registrationForm.bindFromRequest.get
+    Ok(role + " is trying to register with logins : " + username + ":" + password)
   }
 
   // Courses
@@ -90,5 +103,4 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
   def listQuizz(cid: Long) = Action {
     Ok("Request all quizz with course Id " + cid)
   }
-
 }

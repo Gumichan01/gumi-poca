@@ -19,7 +19,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
   }
 
   def inscription = Action {
-    Ok(views.html.connexion("Inscription"))
+    Ok(views.html.inscription("Inscription"))
   }
 
   def cours = Action {
