@@ -1,6 +1,8 @@
 package controllers
 
 import javax.inject._
+
+import model._
 import play.api.mvc._
 
 /**
@@ -10,19 +12,37 @@ import play.api.mvc._
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
+  val serverInstance = Server
+
   def index = Action { implicit request =>
-    Ok(views.html.index("Bienvenue !"))
+    request.session.get("connected").map { user =>
+      Ok(views.html.index("Bienvenue " + user + " sur Evaluator !", true, user))
+    }.getOrElse {
+      Ok(views.html.index("Bienvenue sur Evaluator !", false, ""))
+    }
   }
 
   def connexion = Action { implicit request =>
-    Ok(views.html.connexion("Connexion à Evaluator"))
+    request.session.get("connected").map { user =>
+      Redirect("/")
+    }.getOrElse {
+      Ok(views.html.connexion("Connexion à Evaluator", false, ""))
+    }
   }
 
   def inscription = Action { implicit request =>
-    Ok(views.html.inscription("Inscription"))
+    request.session.get("connected").map { user =>
+      Redirect("/")
+    }.getOrElse {
+      Ok(views.html.inscription("Inscription", false, ""))
+    }
   }
 
   def cours = Action { implicit request =>
-    Ok(views.html.cours("Vos cours"))
+    request.session.get("connected").map { user =>
+      Ok(views.html.cours("Les cours", true, user))
+    }.getOrElse {
+      Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+    }
   }
 }

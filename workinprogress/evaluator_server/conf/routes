@@ -14,9 +14,6 @@ GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
 GET     /message                    controllers.AsyncController.message
 
-# API
-GET     /api/test                   controllers.ApiController.test
-
 # Authentification / Register
 POST    /api/login                  controllers.ApiController.login
 POST    /api/registration           controllers.ApiController.registration

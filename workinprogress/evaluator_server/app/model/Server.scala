@@ -1,6 +1,6 @@
 package model
 
-class Server {
+object Server {
   var listUsers: List[TestUser] = Nil
 
   def addUser(username: String, password: String, role: String) : Boolean = {

@@ -1,7 +1,12 @@
-@(message: String, style: String = "scala") 
+@(message: String, style: String = "scala")(implicit flash: Flash)
 
 @defining(play.core.PlayVersion.current) { version =>
     <main role="main">
+		@if(flash.get("registrationSuccess")) {
+		<div class="alert alert-success">
+			Vous êtes maintenant inscrit et connecté !
+		</div>
+		}
 
       <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="jumbotron">

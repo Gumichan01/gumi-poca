@@ -39,7 +39,7 @@ object CourseGenerator {
 @Singleton
 class ApiController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
-  val serverInstance = new Server()
+  val serverInstance = Server
 
   implicit val courseWrites: Writes[Course] = (
     (JsPath \ "name").write[String] and
@@ -66,17 +66,6 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
     )
   )
 
-  var list = {
-    val a = new ListBuffer[Int]()
-    a += 1
-    a
-  }
-
-  def test = Action {
-    list += (list.last + 1)
-    Ok(list.last.toString)
-  }
-
   // Authentification & Registration
 
   def login = Action { implicit request =>
@@ -94,8 +83,8 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
     val (username, password, role) = registrationForm.bindFromRequest.get
     val result = serverInstance.addUser(username, password, role)
     result match {
-      case true => Ok(role + " successfully registered")
-      case false => Ok("Error registering user")
+      case true => Redirect("/").withSession("connected" -> username).flashing("registrationSuccess" -> "true")
+      case false => Redirect("/inscription.html").flashing("registrationFailure" -> "true")
     }
   }
 

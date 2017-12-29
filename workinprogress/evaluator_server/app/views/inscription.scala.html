@@ -2,14 +2,20 @@
  * This template takes a single argument, a String containing a
  * message to display.
  *@
-@(message: String)
+@(message: String, connected: Boolean, username: String)(implicit flash: Flash)
 
 @*
  * Call the `main` template with two arguments. The first
  * argument is a `String` with the title of the page, the second
  * argument is an `Html` object containing the body of the page.
  *@
-@main("Evaluator - Inscription") {
+@main("Evaluator - Inscription", connected, username) {
+	
+@if(flash.get("registrationFailure")) {
+<div class="alert alert-danger">
+	L'inscription a échouée. Veuillez réessayer !
+</div>
+}
 
 <div class="container-fluid">
 	<form method="post" action="api/registration">
