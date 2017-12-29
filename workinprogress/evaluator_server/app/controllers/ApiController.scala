@@ -1,6 +1,8 @@
 package controllers
 
 import javax.inject._
+import play.api.data._
+import play.api.data.Forms._
 import play.api.mvc._
 import play.api.libs.json._
 import play.api.libs.json.Reads._
@@ -41,6 +43,25 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
     (JsPath \ "name").read[String] and
       (JsPath \ "id").read[Int](min(10))
     )(Course.apply _)
+
+  val userForm = Form(
+    tuple(
+      "username" -> text,
+      "password" -> text
+    )
+  )
+
+  // Authentification
+
+  def login = Action { implicit request =>
+    val (username, password) = userForm.bindFromRequest.get
+    println("Trying to login with " + username + ":" + password)
+    Ok("Hello " + username + ", you're trying to login with: " + password)
+    // Idéalement vérifier si les logins sont bons et rediriger avec
+    // Redirect("path/location")
+  }
+
+  // Courses
 
   def listCourses = Action {
     val json = Json.toJson(CourseGenerator.list)
