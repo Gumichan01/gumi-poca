@@ -7,6 +7,7 @@
 GET     /                           controllers.HomeController.index
 GET     /connexion.html             controllers.HomeController.connexion
 GET     /inscription.html           controllers.HomeController.inscription
+GET     /cours.html                 controllers.HomeController.cours
 
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
@@ -17,8 +18,13 @@ GET     /message                    controllers.AsyncController.message
 # Authentification
 POST    /api/login                  controllers.ApiController.login
 
-GET     /api/courses                controllers.ApiController.listCourses
+# Courses
+GET     /api/courses/all            controllers.ApiController.listCourses
 PUT     /api/courses                controllers.ApiController.saveCourse
+GET     /api/courses/:cid           controllers.ApiController.show(cid: Long)
+
+# Questionnaires
+GET     /api/courses/:cid/quizz/all controllers.ApiController.listQuizz(cid: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

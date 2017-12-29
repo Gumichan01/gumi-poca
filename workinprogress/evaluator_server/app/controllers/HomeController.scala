@@ -11,7 +11,7 @@ import play.api.mvc._
 class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+    Ok(views.html.index("Bienvenue !"))
   }
 
   def connexion = Action {
@@ -20,5 +20,9 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def inscription = Action {
     Ok(views.html.connexion("Inscription"))
+  }
+
+  def cours = Action {
+    Ok(views.html.cours("Vos cours"))
   }
 }

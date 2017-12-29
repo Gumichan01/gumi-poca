@@ -68,6 +68,10 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
     Ok(json)
   }
 
+  def show(cid: Long) = Action {
+    Ok("Requested course with Id " + cid)
+  }
+
   def saveCourse = Action(parse.json) { request =>
     val courseResult = request.body.validate[Course]
     courseResult.fold(
@@ -79,6 +83,12 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
         Ok(Json.obj("status" ->"OK", "message" -> ("Course '"+course.name+"' saved.") ))
       }
     )
+  }
+
+  // Quizz/Questionnaires
+
+  def listQuizz(cid: Long) = Action {
+    Ok("Request all quizz with course Id " + cid)
   }
 
 }
