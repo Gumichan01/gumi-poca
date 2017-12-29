@@ -11,6 +11,8 @@ import play.api.libs.functional.syntax._
 
 import scala.collection.mutable.ListBuffer
 
+import model._
+
 // Course example class to test
 
 case class Course(name: String, id: Int)
@@ -36,6 +38,8 @@ object CourseGenerator {
 
 @Singleton
 class ApiController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+
+  val serverInstance = new Server()
 
   implicit val courseWrites: Writes[Course] = (
     (JsPath \ "name").write[String] and
@@ -77,15 +81,28 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
 
   def login = Action { implicit request =>
     val (username, password) = loginForm.bindFromRequest.get
-    println("Trying to login with " + username + ":" + password)
-    Ok("Hello " + username + ", you're trying to login with: " + password)
-    // Idéalement vérifier si les logins sont bons et rediriger avec
+    val result = serverInstance.userLogIn(username, password)
+    result match {
+      case true => Redirect("/").withSession("connected" -> username)
+      case false => Redirect("/connexion.html").flashing("loginFailure" -> "true")
+    }
+    // A voir si on redirige
     // Redirect("path/location")
   }
 
   def registration = Action { implicit request =>
     val (username, password, role) = registrationForm.bindFromRequest.get
-    Ok(role + " is trying to register with logins : " + username + ":" + password)
+    val result = serverInstance.addUser(username, password, role)
+    result match {
+      case true => Ok(role + " successfully registered")
+      case false => Ok("Error registering user")
+    }
+  }
+
+  // Users
+
+  def listUsers = Action {
+    Ok("List Users here !")
   }
 
   // Courses

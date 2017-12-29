@@ -2,7 +2,8 @@
  * This template takes a single argument, a String containing a
  * message to display.
  *@
-@(message: String)
+
+@(message: String)(implicit flash: Flash)
 
 @*
  * Call the `main` template with two arguments. The first
@@ -11,11 +12,17 @@
  *@
 @main("Evaluator - Connexion") {
 
+@if(flash.get("loginFailure")) {
+<div class="alert alert-danger">
+	Échec lors de la connexion. Veuillez réessayer !
+</div>
+}
+
 <div class="container-fluid">
 	<form method="post" action="api/login">
 		<div class="form-group">
 			<label for="exampleInputEmail1">Nom d'utilisateur</label>
-			<input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Entrez votre nom d'utilisateur">
+			<input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Entrez un nom d'utilisateur">
 			<small id="usernameHelp" class="form-text text-muted">Le nom d'utilisateur que vous avez choisi lors de votre inscription.</small>
 		</div>
 		<div class="form-group">

@@ -21,6 +21,9 @@ GET     /api/test                   controllers.ApiController.test
 POST    /api/login                  controllers.ApiController.login
 POST    /api/registration           controllers.ApiController.registration
 
+# Users
+GET     /api/users/all              controllers.ApiController.listUsers
+
 # Courses
 GET     /api/courses/all            controllers.ApiController.listCourses
 PUT     /api/courses                controllers.ApiController.saveCourse

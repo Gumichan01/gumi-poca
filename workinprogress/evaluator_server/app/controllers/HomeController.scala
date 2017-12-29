@@ -10,19 +10,19 @@ import play.api.mvc._
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
-  def index = Action {
+  def index = Action { implicit request =>
     Ok(views.html.index("Bienvenue !"))
   }
 
-  def connexion = Action {
+  def connexion = Action { implicit request =>
     Ok(views.html.connexion("Connexion à Evaluator"))
   }
 
-  def inscription = Action {
+  def inscription = Action { implicit request =>
     Ok(views.html.inscription("Inscription"))
   }
 
-  def cours = Action {
+  def cours = Action { implicit request =>
     Ok(views.html.cours("Vos cours"))
   }
 }
