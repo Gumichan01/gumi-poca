@@ -8,6 +8,8 @@ GET     /                           controllers.HomeController.index
 GET     /connexion.html             controllers.HomeController.connexion
 GET     /inscription.html           controllers.HomeController.inscription
 GET     /cours.html                 controllers.HomeController.cours
+GET     /cours/:cid.html            controllers.HomeController.coursSpecifique(cid: Long)
+GET     /utilisateurs.html          controllers.HomeController.utilisateurs
 
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
@@ -17,9 +19,11 @@ GET     /message                    controllers.AsyncController.message
 # Authentification / Register
 POST    /api/login                  controllers.ApiController.login
 POST    /api/registration           controllers.ApiController.registration
+GET     /api/disconnect             controllers.ApiController.disconnect
 
 # Users
 GET     /api/users/all              controllers.ApiController.listUsers
+GET     /api/users/me               controllers.ApiController.detailsAboutMe
 
 # Courses
 GET     /api/courses/all            controllers.ApiController.listCourses

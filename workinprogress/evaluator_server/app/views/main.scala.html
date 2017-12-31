@@ -4,7 +4,7 @@
  * two arguments, a `String` for the title of the page and an `Html`
  * object to insert into the body of the page.
  *@
-@(title: String, connected: Boolean, username: String)(content: Html)
+@(title: String, connected: Boolean, username: String)(script:Html)(content: Html)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/stylesheets/bootstrap.min.css" />
   </head>
   <body>
   	<nav class="navbar navbar-expand-md navbar-dark static-top bg-dark">
@@ -24,22 +24,22 @@
         <span class="navbar-toggler-icon"></span>
 		</button>
 
-		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+		<div class="collapse navbar-collapse" id="evaluatorNavbar">
         	<ul class="navbar-nav mr-auto">
-				<li class="nav-item active">
+				<li class="nav-item">
 					<a class="nav-link" href="/">Accueil <span class="sr-only">(current)</span></a>
 				</li>
 				<li class="nav-item">
-            		<a class="nav-link" href="connexion.html">Connexion</a>
+            		<a class="nav-link @if(connected) { disabled }" href="connexion.html">Connexion</a>
 				</li>
 				<li class="nav-item">
-            		<a class="nav-link" href="inscription.html">Inscription</a>
+            		<a class="nav-link @if(connected) { disabled }" href="inscription.html">Inscription</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="cours.html">Cours</a>
+					<a class="nav-link @if(connected == false) { disabled }" href="cours.html">Cours</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link disabled" href="#">Utilisateurs</a>
+					<a class="nav-link @if(connected == false) { disabled }" href="utilisateurs.html">Utilisateurs</a>
 				</li>
 				<!-- Exemple de dropdown
 				<li class="nav-item dropdown">
@@ -54,6 +54,7 @@
        		</ul>
        		@if(connected) {
        			<a class="navbar-brand navbar-right" href="#">@username</a>
+       			<a class="navbar-brand navbar-right" href="/api/disconnect">Déconnexion</a>
        		}
        		<!-- Exemple de recherche
 	   		<form class="form-inline my-2 my-lg-0">
@@ -70,7 +71,11 @@
         
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Bootstrap JS -->
-	<script src="assets/javascripts/jquery-3.2.1.min.js"></script>
-	<script src="assets/javascripts/bootstrap.min.js"></script>
+	<script src="/assets/javascripts/jquery-3.2.1.min.js"></script>
+	<script src="/assets/javascripts/bootstrap.min.js"></script>
+	
+	<script>
+		@script
+	</script>
  </body>
 </html>

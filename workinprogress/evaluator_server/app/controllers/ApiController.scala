@@ -88,10 +88,22 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
     }
   }
 
+  def disconnect = Action { implicit request =>
+    Redirect(routes.HomeController.index()).withNewSession.flashing("disconnect" -> "true")
+  }
+
   // Users
 
   def listUsers = Action {
     Ok("List Users here !")
+  }
+
+  def detailsAboutMe = Action { implicit request =>
+    request.session.get("connected").map { user =>
+      Ok("You're " + user)
+    }.getOrElse {
+      Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+    }
   }
 
   // Courses

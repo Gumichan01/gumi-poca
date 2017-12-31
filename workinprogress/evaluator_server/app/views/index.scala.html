@@ -4,12 +4,14 @@
  *@
 @(message: String, connected: Boolean, username: String = "")(implicit flash: Flash)
 
+@script = {}
+
 @*
  * Call the `main` template with two arguments. The first
  * argument is a `String` with the title of the page, the second
  * argument is an `Html` object containing the body of the page.
  *@
-@main(message, connected, username) {
+@main(message, connected, username)(script) {
 
     @*
      * Get an `Html` object by calling the built-in Play welcome

@@ -45,4 +45,20 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
       Unauthorized("Accès non autorisé. Veuillez vous connecter !")
     }
   }
+
+  def coursSpecifique(cid: Long) = Action { implicit request =>
+    request.session.get("connected").map { user =>
+      Ok(views.html.cours("Cours avec id " + cid, true, user, cid))
+    }.getOrElse {
+      Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+    }
+  }
+
+  def utilisateurs = Action { implicit request =>
+    request.session.get("connected").map { user =>
+      Ok(views.html.utilisateurs("Utilisateurs", true, user))
+    }.getOrElse {
+      Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+    }
+  }
 }

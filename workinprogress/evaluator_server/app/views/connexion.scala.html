@@ -5,11 +5,19 @@
 @(message: String, connected: Boolean, username: String)(implicit flash: Flash)
 
 @*
+Ne fonctionne pas :(
+*@
+
+@script = {
+	$("#evaluatorNavbar").find('a:contains('Connexion').parent().addClass('active');
+}
+
+@*
  * Call the `main` template with two arguments. The first
  * argument is a `String` with the title of the page, the second
  * argument is an `Html` object containing the body of the page.
  *@
-@main("Evaluator - Connexion", connected, username) {
+@main("Evaluator - Connexion", connected, username)(script) {
 
 @if(flash.get("loginFailure")) {
 <div class="alert alert-danger">
@@ -18,19 +26,23 @@
 }
 
 <div class="container-fluid">
-	<form method="post" action="api/login">
-		<div class="form-group">
-			<label for="exampleInputEmail1">Nom d'utilisateur</label>
-			<input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Entrez un nom d'utilisateur">
-			<small id="usernameHelp" class="form-text text-muted">Le nom d'utilisateur que vous avez choisi lors de votre inscription.</small>
-		</div>
-		<div class="form-group">
-			<label for="exampleInputPassword1">Mot de passe</label>
-			<input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe" aria-describedby="passwordHelp">
-			<small id="passwordHelp" class="form-text text-muted">Votre mot de passe d'au moins 4 caractères.</small>
-		</div>
-  		<button type="submit" class="btn btn-primary">Connexion</button>
-	</form>
+	<div class="jumbotron">
+		<h1>Connexion</h1>
+		
+		<form method="post" action="api/login">
+			<div class="form-group">
+				<label for="exampleInputEmail1">Nom d'utilisateur</label>
+				<input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Entrez un nom d'utilisateur">
+				<small id="usernameHelp" class="form-text text-muted">Le nom d'utilisateur que vous avez choisi lors de votre inscription.</small>
+			</div>
+			<div class="form-group">
+				<label for="exampleInputPassword1">Mot de passe</label>
+				<input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe" aria-describedby="passwordHelp">
+				<small id="passwordHelp" class="form-text text-muted">Votre mot de passe d'au moins 4 caractères.</small>
+			</div>
+	  		<button type="submit" class="btn btn-primary">Connexion</button>
+  		</form>
+	</div>
 </div>
 
 }
