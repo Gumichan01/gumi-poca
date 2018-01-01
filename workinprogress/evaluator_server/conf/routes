@@ -9,6 +9,8 @@ GET     /connexion.html             controllers.HomeController.connexion
 GET     /inscription.html           controllers.HomeController.inscription
 GET     /cours.html                 controllers.HomeController.cours
 GET     /cours/:cid.html            controllers.HomeController.coursSpecifique(cid: Long)
+GET     /cours/:cid/surveys.html    controllers.HomeController.listeQuestionnaires(cid: Long)
+GET     /cours/:cid/newsurvey.html  controllers.HomeController.nouveauQuestionnaire(cid: Long)
 GET     /utilisateurs.html          controllers.HomeController.utilisateurs
 
 # An example controller showing how to use dependency injection

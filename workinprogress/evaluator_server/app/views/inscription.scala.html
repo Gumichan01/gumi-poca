@@ -24,19 +24,24 @@
 		<h1>Inscription</h1>
 			<form method="post" action="api/registration">
 			<div class="form-group">
-				<label for="exampleInputEmail1">Nom d'utilisateur</label>
-				<input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Entrez votre nom d'utilisateur">
-				<small id="usernameHelp" class="form-text text-muted">Le nom d'utilisateur qui permettra votre connexion.</small>
+				<label for="surname">Nom</label>
+				<input type="text" class="form-control" name="surname" id="surname" aria-describedby="surnameHelp" placeholder="Entrez votre nom">
+				<small id="surnameHelp" class="form-text text-muted">Il vous servira d'identifiant.</small>
 			</div>
 			<div class="form-group">
-				<label for="exampleInputPassword1">Mot de passe</label>
+				<label for="name">Prénom</label>
+				<input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Entrez votre nom d'utilisateur">
+				<small id="nameHelp" class="form-text text-muted">Votre prénom, duh.</small>
+			</div>
+			<div class="form-group">
+				<label for="password">Mot de passe</label>
 				<input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe" aria-describedby="passwordHelp">
 				<small id="passwordHelp" class="form-text text-muted">Votre mot de passe d'au moins 4 caractères.</small>
 			</div>
 			<div class="form-group">
-				<label for="exampleSelect1">Rôle</label>
+				<label for="role">Rôle</label>
 				<select class="selectpicker" name="role" id="role" class="form-control" aria-describedby="roleHelp">
-					<option value="teacher">Professeur</option>
+					<option value="professor">Professeur</option>
 					<option value="student">Etudiant</option>
 				</select>
 				<small id="roleHelp" class="form-text text-muted">Sélectionnez votre rôle sur la plateforme.</small>

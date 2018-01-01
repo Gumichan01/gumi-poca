@@ -8,6 +8,7 @@
 // I do not know yet how to really implement it because it will be coupled with the web framework
 // Could we use a singleton (using `object`) but then it is not really a class anymore
 
-abstract class Server {
+class Server {
+  val users: List[User]
   val courses: List[Course] // how will we load courses...
 }

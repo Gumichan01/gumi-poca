@@ -54,6 +54,22 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     }
   }
 
+  def listeQuestionnaires(cid: Long) = Action { implicit request =>
+    request.session.get("connected").map { user =>
+      Ok(views.html.surveys("Liste des questionnaires", true, user))
+    }.getOrElse {
+      Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+    }
+  }
+
+  def nouveauQuestionnaire(cid: Long) = Action { implicit request =>
+    request.session.get("connected").map { user =>
+      Ok(views.html.newsurvey("Nouveau Questionnaire", true, user))
+    }.getOrElse {
+      Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+    }
+  }
+
   def utilisateurs = Action { implicit request =>
     request.session.get("connected").map { user =>
       Ok(views.html.utilisateurs("Utilisateurs", true, user))

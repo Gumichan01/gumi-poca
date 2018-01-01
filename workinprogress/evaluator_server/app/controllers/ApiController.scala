@@ -53,14 +53,15 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
 
   val loginForm = Form(
     tuple(
-      "username" -> text,
+      "surname" -> text,
       "password" -> text
     )
   )
 
   val registrationForm = Form(
     tuple(
-      "username" -> text,
+      "surname" -> text,
+      "name" -> text,
       "password" -> text,
       "role" -> text
     )
@@ -69,10 +70,10 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
   // Authentification & Registration
 
   def login = Action { implicit request =>
-    val (username, password) = loginForm.bindFromRequest.get
-    val result = serverInstance.userLogIn(username, password)
+    val (surname, password) = loginForm.bindFromRequest.get
+    val result = serverInstance.userLogIn(surname, password)
     result match {
-      case true => Redirect("/").withSession("connected" -> username)
+      case true => Redirect("/").withSession("connected" -> surname)
       case false => Redirect("/connexion.html").flashing("loginFailure" -> "true")
     }
     // A voir si on redirige
@@ -80,10 +81,10 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
   }
 
   def registration = Action { implicit request =>
-    val (username, password, role) = registrationForm.bindFromRequest.get
-    val result = serverInstance.addUser(username, password, role)
+    val (surname, name, password, role) = registrationForm.bindFromRequest.get
+    val result = serverInstance.addUser(surname, name, password, role)
     result match {
-      case true => Redirect("/").withSession("connected" -> username).flashing("registrationSuccess" -> "true")
+      case true => Redirect("/").withSession("connected" -> surname).flashing("registrationSuccess" -> "true")
       case false => Redirect("/inscription.html").flashing("registrationFailure" -> "true")
     }
   }
