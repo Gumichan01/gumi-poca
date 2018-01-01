@@ -9,6 +9,7 @@ GET     /connexion.html             controllers.HomeController.connexion
 GET     /inscription.html           controllers.HomeController.inscription
 GET     /cours.html                 controllers.HomeController.cours
 GET     /cours/:cid.html            controllers.HomeController.coursSpecifique(cid: Long)
+GET     /newcours.html              controllers.HomeController.nouveauCours
 GET     /cours/:cid/surveys.html    controllers.HomeController.listeQuestionnaires(cid: Long)
 GET     /cours/:cid/newsurvey.html  controllers.HomeController.nouveauQuestionnaire(cid: Long)
 GET     /utilisateurs.html          controllers.HomeController.utilisateurs
@@ -29,8 +30,8 @@ GET     /api/users/all              controllers.ApiController.listUsers
 GET     /api/users/me               controllers.ApiController.detailsAboutMe
 
 # Courses
+POST    /api/newcourse              controllers.ApiController.newCourse
 GET     /api/courses/all            controllers.ApiController.listCourses
-PUT     /api/courses                controllers.ApiController.saveCourse
 GET     /api/courses/:cid           controllers.ApiController.show(cid: Long)
 
 # Questionnaires

@@ -1,0 +1,42 @@
+@*
+ * This template takes a single argument, a String containing a
+ * message to display.
+ *@
+@(message: String, connected: Boolean, user: model.Professor)(implicit flash: Flash)
+
+@script = {}
+
+@*
+ * Call the `main` template with two arguments. The first
+ * argument is a `String` with the title of the page, the second
+ * argument is an `Html` object containing the body of the page.
+ *@
+@main(message, connected, user)(script) {
+	@if(flash.get("courseFailure")) {
+		<div class="alert alert-danger">
+			Le cours n'a pas pu été enregistré. Veuillez réessayer !
+		</div>
+	}
+	
+<div class="container-fluid">
+	<div class="jumbotron">
+		<h1>Nouveau Cours</h1>
+		
+		<form method="post" action="api/newcourse">
+			<input type="hidden" id="hiddenProfId" name="profId" value="@user.getID" />
+			<div class="form-group">
+				<label for="name">Nom du cours</label>
+				<input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Entrez le nom">
+				<small id="nameHelp" class="form-text text-muted">Il s'agit de l'intitulé du cours.</small>
+			</div>
+			<div class="form-group">
+				<label for="content">Contenu</label>
+				<textarea class="form-control" rows="5" id="content" name="content" aria-describedby="contentHelp" placeholder="Entrez ici le contenu du cours"></textarea>
+				<small id="contentHelp" class="form-text text-muted">Le contenu du cours. Aucune limite de contenu.</small>
+			</div>
+	  		<button type="submit" class="btn btn-primary">Enregistrer</button>
+  		</form>
+	</div>
+</div>
+</div>	
+}

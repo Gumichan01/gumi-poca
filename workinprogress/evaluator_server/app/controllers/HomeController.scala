@@ -44,7 +44,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
   def cours = Action { implicit request =>
     request.session.get("connected").map { user =>
       Server.userWithSurname(user) match {
-        case Some(userModel) => Ok(views.html.cours("Profil", true, userModel))
+        case Some(userModel) => Ok(views.html.cours("Profil", true, userModel, Server.listCourses))
         case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
       }
     }.getOrElse {
@@ -55,8 +55,31 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
   def coursSpecifique(cid: Long) = Action { implicit request =>
     request.session.get("connected").map { user =>
       Server.userWithSurname(user) match {
-        case Some(userModel) => Ok(views.html.cours("Profil", true, userModel, cid))
+        case Some(userModel) => {
+          val reqCourse = Server.getCourse(cid)
+          reqCourse match {
+            case Some(theCourse) => Ok(views.html.cours("Cours " + theCourse.getName, true, userModel, null, theCourse))
+            case _ => BadRequest("Cours non existant...")
+          }
+        }
         case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+      }
+    }.getOrElse {
+      Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+    }
+  }
+
+  def nouveauCours = Action { implicit request =>
+    request.session.get("connected").map { user =>
+      val theUser = Server.userWithSurname(user)
+      theUser match {
+        case Some(absUser) => {
+          absUser match {
+            case s: Student => Unauthorized("Accès réservé aux professeurs !")
+            case t: Professor => Ok(views.html.newcours("Nouveau Cours", true, t))
+          }
+        }
+        case None => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
       }
     }.getOrElse {
       Unauthorized("Accès non autorisé. Veuillez vous connecter !")
@@ -76,8 +99,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def nouveauQuestionnaire(cid: Long) = Action { implicit request =>
     request.session.get("connected").map { user =>
-      val optionalUser = Server.userWithSurname(user)
-      optionalUser match {
+      Server.userWithSurname(user) match {
         case t: Some[Professor] => Ok(views.html.newsurvey("Nouveau Questionnaire", true, t.get, cid))
         case s: Some[Student] => Unauthorized("Accès réservé aux professeurs !")
         case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")

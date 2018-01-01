@@ -17,7 +17,7 @@ Ne fonctionne pas :(
  * argument is a `String` with the title of the page, the second
  * argument is an `Html` object containing the body of the page.
  *@
-@main("Evaluator - Connexion", connected, user)(script) {
+@main(message, connected, user)(script) {
 
 @if(flash.get("loginFailure")) {
 <div class="alert alert-danger">
@@ -31,7 +31,7 @@ Ne fonctionne pas :(
 		
 		<form method="post" action="api/login">
 			<div class="form-group">
-				<label for="exampleInputEmail1">Nom</label>
+				<label for="surname">Nom</label>
 				<input type="text" class="form-control" name="surname" id="surname" aria-describedby="surnameHelp" placeholder="Entrez votre nom">
 				<small id="surnameHelp" class="form-text text-muted">Votre nom (il vous sert d'identifiant)</small>
 			</div>

@@ -13,8 +13,10 @@ import scala.collection.mutable.ListBuffer
 
 import model._
 
+
 // Course example class to test
 
+/*
 case class Course(name: String, id: Int)
 
 object CourseGenerator {
@@ -35,21 +37,24 @@ object CourseGenerator {
     list = list ::: List(course)
   }
 }
+*/
 
 @Singleton
 class ApiController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   val serverInstance = Server
 
+  /*
   implicit val courseWrites: Writes[Course] = (
     (JsPath \ "name").write[String] and
       (JsPath \ "id").write[Int]
-    )(unlift(Course.unapply))
+    )(unlift(model.Course.unapply))
 
   implicit val courseReads: Reads[Course] = (
     (JsPath \ "name").read[String] and
       (JsPath \ "id").read[Int](min(10))
     )(Course.apply _)
+  */
 
   val loginForm = Form(
     tuple(
@@ -64,6 +69,14 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
       "name" -> text,
       "password" -> text,
       "role" -> text
+    )
+  )
+
+  val courseForm = Form(
+    tuple(
+      "profId" -> number,
+      "name" -> text,
+      "content" -> text
     )
   )
 
@@ -110,15 +123,27 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
   // Courses
 
   def listCourses = Action {
-    val json = Json.toJson(CourseGenerator.list)
-    Ok(json)
+    //val json = Json.toJson(CourseGenerator.list)
+    Ok("empty for now")
   }
 
   def show(cid: Long) = Action {
     Ok("Requested course with Id " + cid)
   }
 
-  def saveCourse = Action(parse.json) { request =>
+  def newCourse = Action { implicit request =>
+    println("Contenu Request : " + request.body.asJson)
+    val (profId, name, content) = courseForm.bindFromRequest.get
+    val result = serverInstance.addCourse(name, content, profId)
+    result match {
+      case true => Redirect("/").flashing("courseSuccess" -> "true")
+      case false => Redirect("/newcours.html").flashing("courseFailure" -> "true")
+    }
+  }
+
+  // Pour parser du JSON
+  /*
+  def saveCourse = Action(parse.json) { implicit request =>
     val courseResult = request.body.validate[Course]
     courseResult.fold(
       errors => {
@@ -129,7 +154,7 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
         Ok(Json.obj("status" ->"OK", "message" -> ("Course '"+course.name+"' saved.") ))
       }
     )
-  }
+  */
 
   // Quizz/Questionnaires
 

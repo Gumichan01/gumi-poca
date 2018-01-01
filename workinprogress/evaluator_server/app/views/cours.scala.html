@@ -2,7 +2,7 @@
  * This template takes a single argument, a String containing a
  * message to display.
  *@
-@(message: String, connected: Boolean, user: model.User, cid: Long = -1)(implicit flash: Flash)
+@(message: String, connected: Boolean, user: model.User, cl: List[model.Course], c: model.Course = null)(implicit flash: Flash)
 
 @script = {}
 
@@ -13,26 +13,35 @@
  *@
 @main(message, connected, user)(script) {
 
-@if(cid != -1) {
+@if(c != null) {
 <div class="container-fluid">
 	<div class="jumbotron">
-		<h1>Cours avec ID = @cid</h1>
-		<div class="list-group">
-			<a href="#" class="list-group-item list-group-item-action">Intitulé Cours @cid</a>
+		<h1>Cours @c.getName</h1>
+		<div class="jumbotron">
+			@c.getContent
 		</div>
 	</div>
 </div>		
 } else {
 <div class="container-fluid">
 	<div class="jumbotron">
-		<h1>Liste des cours</h1>
+		<h1>Ajouter un cours</h1>
 		<div class="list-group">
-			<a href="/cours/1.html" class="list-group-item list-group-item-action">Intitulé Cours 1</a>
-			<a href="/cours/2.html" class="list-group-item list-group-item-action">Intitulé Cours 2</a>
-			<a href="/cours/3.html" class="list-group-item list-group-item-action">Intitulé Cours 3</a>
-			<a href="/cours/4.html" class="list-group-item list-group-item-action">Intitulé Cours 4</a>
-			<a href="/cours/5.html" class="list-group-item list-group-item-action">Intitulé Cours 5</a>
+			<a href="/newcours.html" class="list-group-item list-group-item-action">Cliquez ici pour ajouter un cours</a>
 		</div>
+		
+		<h1>Liste des cours</h1>
+		@if(cl.equals(Nil)) {
+			<div class="alert alert-info">
+				Il n'y a aucun cours pour l'instant.
+			</div>
+		} else {
+			<div class="list-group">
+				@for(c <- cl) {
+					<a href="/cours/@{c.getID}.html" class="list-group-item list-group-item-action">@c.getName</a>
+				}
+			</div>
+		}
 	</div>
 </div>	
 }

@@ -7,6 +7,7 @@ object Cid{
     private var pcid : Int = 0;
     val _id : Int = { pcid = pcid + 1; pcid};
 }
+
 class Course(nom:String,survl: List[Survey], cont: String, idProf: Int, listStudent: List[Int]) {
   private val name = nom;
   private val idC = Cid._id;
@@ -41,4 +42,8 @@ class Course(nom:String,survl: List[Survey], cont: String, idProf: Int, listStud
   def addContent(cont : String) ={
     content = cont;
   }
+  def getName : String = return name
+  def getContent : String = return content
+  def getIDProf : Int = return idP
+  def getID : Int = return idC
 }

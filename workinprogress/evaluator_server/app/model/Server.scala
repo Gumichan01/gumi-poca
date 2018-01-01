@@ -2,6 +2,7 @@ package model
 
 object Server {
   var listUsers: List[User] = Nil
+  var listCourses: List[Course] = Nil
 
   def addStartData: Unit = {
     var prof = new Professor("Gustavo", "Pietri", "gpietri");
@@ -47,6 +48,20 @@ object Server {
     val filteredSurnames = listUsers.filter(_.getSurname.equals(surname))
     filteredSurnames.size match {
       case 1 => Some(filteredSurnames.head)
+      case _ => None
+    }
+  }
+
+  def addCourse(name: String, content: String, profId: Int) : Boolean = {
+    val course = new Course(name, Nil, content, profId, Nil)
+    listCourses = course :: listCourses
+    true
+  }
+
+  def getCourse(cid: Long) : Option[Course] = {
+    val filteredCourses = listCourses.filter(_.getID == cid)
+    filteredCourses.size match {
+      case 1 => Some(filteredCourses.head)
       case _ => None
     }
   }

@@ -7,6 +7,16 @@
 			Vous êtes maintenant inscrit et connecté !
 		</div>
 		}
+		@if(flash.get("disconnect")) {
+		<div class="alert alert-success">
+			Vous avez bien été déconnecté !
+		</div>
+		}
+		@if(flash.get("courseSuccess")) {
+		<div class="alert alert-success">
+			Le cours a bien été enregistré !
+		</div>
+		}
 
       <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="jumbotron">
