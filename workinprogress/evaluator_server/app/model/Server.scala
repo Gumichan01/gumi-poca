@@ -29,8 +29,7 @@ object Server {
   }
 
   def checkSurnameAvailable(surname: String) : Boolean = {
-    val filteredSurnames = listUsers.filter(_.getSurname.equals(surname))
-    filteredSurnames.size == 0
+    userWithSurname(surname) != None
   }
 
   def userLogIn(surname: String, password: String) : Boolean = {
@@ -41,6 +40,14 @@ object Server {
     else {
       val foundUser = filteredSurnames.head
       return foundUser.getPassword.equals(password)
+    }
+  }
+
+  def userWithSurname(surname: String) : Option[User] = {
+    val filteredSurnames = listUsers.filter(_.getSurname.equals(surname))
+    filteredSurnames.size match {
+      case 1 => Some(filteredSurnames.head)
+      case _ => None
     }
   }
 }

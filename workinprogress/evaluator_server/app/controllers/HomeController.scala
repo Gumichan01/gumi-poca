@@ -16,9 +16,12 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def index = Action { implicit request =>
     request.session.get("connected").map { user =>
-      Ok(views.html.index("Bienvenue " + user + " sur Evaluator !", true, user))
+      Server.userWithSurname(user) match {
+        case Some(userModel) => Ok(views.html.index("Bienvenue " + user + " sur Evaluator !", true, userModel))
+        case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+      }
     }.getOrElse {
-      Ok(views.html.index("Bienvenue sur Evaluator !", false, ""))
+      Ok(views.html.index("Bienvenue sur Evaluator !", false))
     }
   }
 
@@ -26,7 +29,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     request.session.get("connected").map { user =>
       Redirect("/")
     }.getOrElse {
-      Ok(views.html.connexion("Connexion à Evaluator", false, ""))
+      Ok(views.html.connexion("Connexion à Evaluator", false, null))
     }
   }
 
@@ -34,13 +37,16 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     request.session.get("connected").map { user =>
       Redirect("/")
     }.getOrElse {
-      Ok(views.html.inscription("Inscription", false, ""))
+      Ok(views.html.inscription("Inscription", false, null))
     }
   }
 
   def cours = Action { implicit request =>
     request.session.get("connected").map { user =>
-      Ok(views.html.cours("Les cours", true, user))
+      Server.userWithSurname(user) match {
+        case Some(userModel) => Ok(views.html.cours("Profil", true, userModel))
+        case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+      }
     }.getOrElse {
       Unauthorized("Accès non autorisé. Veuillez vous connecter !")
     }
@@ -48,7 +54,10 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def coursSpecifique(cid: Long) = Action { implicit request =>
     request.session.get("connected").map { user =>
-      Ok(views.html.cours("Cours avec id " + cid, true, user, cid))
+      Server.userWithSurname(user) match {
+        case Some(userModel) => Ok(views.html.cours("Profil", true, userModel, cid))
+        case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+      }
     }.getOrElse {
       Unauthorized("Accès non autorisé. Veuillez vous connecter !")
     }
@@ -56,7 +65,10 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def listeQuestionnaires(cid: Long) = Action { implicit request =>
     request.session.get("connected").map { user =>
-      Ok(views.html.surveys("Liste des questionnaires", true, user))
+      Server.userWithSurname(user) match {
+        case Some(userModel) => Ok(views.html.surveys("Liste des questionnaires", true, userModel, cid))
+        case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+      }
     }.getOrElse {
       Unauthorized("Accès non autorisé. Veuillez vous connecter !")
     }
@@ -64,7 +76,12 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def nouveauQuestionnaire(cid: Long) = Action { implicit request =>
     request.session.get("connected").map { user =>
-      Ok(views.html.newsurvey("Nouveau Questionnaire", true, user))
+      val optionalUser = Server.userWithSurname(user)
+      optionalUser match {
+        case t: Some[Professor] => Ok(views.html.newsurvey("Nouveau Questionnaire", true, t.get, cid))
+        case s: Some[Student] => Unauthorized("Accès réservé aux professeurs !")
+        case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+      }
     }.getOrElse {
       Unauthorized("Accès non autorisé. Veuillez vous connecter !")
     }
@@ -72,7 +89,21 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def utilisateurs = Action { implicit request =>
     request.session.get("connected").map { user =>
-      Ok(views.html.utilisateurs("Utilisateurs", true, user))
+      Server.userWithSurname(user) match {
+        case Some(userModel) => Ok(views.html.utilisateurs("Utilisateurs", true, userModel, Server.listUsers))
+        case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+      }
+    }.getOrElse {
+      Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+    }
+  }
+
+  def profil = Action { implicit request =>
+    request.session.get("connected").map { user =>
+      Server.userWithSurname(user) match {
+        case Some(userModel) => Ok(views.html.profil("Profil", true, userModel))
+        case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+      }
     }.getOrElse {
       Unauthorized("Accès non autorisé. Veuillez vous connecter !")
     }
