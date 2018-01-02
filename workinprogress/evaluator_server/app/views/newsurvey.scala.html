@@ -2,9 +2,65 @@
  * This template takes a single argument, a String containing a
  * message to display.
  *@
-@(message: String, connected: Boolean, user: model.Professor, sid: Long = -1)(implicit flash: Flash)
+@(message: String, connected: Boolean, user: model.Professor, c: model.Course)(implicit flash: Flash)
 
-@script = {}
+@script = {
+	var questionsCount = 0;
+	
+	function promptQuestionQCM() {
+		var qcmPossibilites = 3;
+		var qcmStrings = [];
+		var goodAnswers = "";
+		var intitule = prompt("Veuillez entrer l'intitulé de la question", "");
+		
+		if (intitule != null && intitule != "") {
+			qcmPossibilites = prompt("Combien y a t-il de possibilités ?", qcmPossibilites.toString());
+			
+			for (i = 0; i < qcmPossibilites; i++) {
+				var aString = prompt("Entrez la possibilite " + (i+1), "");
+				if (aString != null && aString != "") {
+					qcmStrings.push(aString);
+				}
+			}
+			
+			if (qcmStrings.length == parseInt(qcmPossibilites)) {
+				goodAnswers = prompt("Quelles sont la/les bonnes réponses (ex : 1 ou 1|3) ?")
+				
+				if (goodAnswers != null && goodAnswers != "") {
+					var codeFinal = `
+					<div class="form-group" id="questionContent">
+						<label for="questionQuestion">Intitulé</label>
+						<input type="text" class="form-control" name="questionQuestion1" id="questionQuestion1" aria-describedby="questionQuestionHelp" value="${intitule}">
+						<div class="list-group">
+					`;
+					
+					for (i = 0; i < qcmPossibilites; i++) {
+						codeFinal += `
+							<a href="#" class="list-group-item">${qcmStrings[i]}</a>
+						`;
+					}
+					
+					codeFinal += '</div>';
+					
+					$("#questionTypeDiv").append(codeFinal);
+				}
+			}
+		}
+	}
+	
+	function promptQuestion() {
+		var questionType = $("#questionType").val();
+		if (questionType === "qcm") {
+			promptQuestionQCM();
+		}
+	}
+		
+	$(document).ready(function () {
+		$('#validate').click(function() {
+			promptQuestion();
+		});
+	})
+}
 
 @*
  * Call the `main` template with two arguments. The first
@@ -12,29 +68,21 @@
  * argument is an `Html` object containing the body of the page.
  *@
 @main(message, connected, user)(script) {
-	
-@if(sid != -1) {
 <div class="container-fluid">
 	<div class="jumbotron">
-		<h1>Cours avec ID = @sid</h1>
-		<div class="list-group">
-			<a href="#" class="list-group-item list-group-item-action">Intitulé Cours @sid</a>
-		</div>
+		<h1>Nouveau Questionnaire</h1>
+		<form method="post" action="/api/survey" id="surveyForm">
+			<div class="form-group" id="questionTypeDiv">
+				<div class="form-group">
+					<label for="questionType">Ajouter une question avec type</label>
+					<select class="selectpicker" name="questionType" id="questionType" class="form-control" aria-describedby="questionTypeHelp">
+						<option value="qcm">QCM</option>
+						<option value="code">Code</option>
+					</select>
+					<button type="button" class="btn btn-primary" value="Valider" id="validate">Valider</button>
+				</div>
+			</div>
+		</form>
 	</div>
-</div>		
-} else {
-<div class="container-fluid">
-	<div class="jumbotron">
-		<h1>Liste des cours</h1>
-		<div class="list-group">
-			<a href="/cours/1.html" class="list-group-item list-group-item-action">Intitulé Cours 1</a>
-			<a href="/cours/2.html" class="list-group-item list-group-item-action">Intitulé Cours 2</a>
-			<a href="/cours/3.html" class="list-group-item list-group-item-action">Intitulé Cours 3</a>
-			<a href="/cours/4.html" class="list-group-item list-group-item-action">Intitulé Cours 4</a>
-			<a href="/cours/5.html" class="list-group-item list-group-item-action">Intitulé Cours 5</a>
-		</div>
-	</div>
-</div>	
-}
-
+</div>
 }

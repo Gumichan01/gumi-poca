@@ -52,10 +52,10 @@ object Server {
     }
   }
 
-  def addCourse(name: String, content: String, profId: Int) : Boolean = {
+  def addCourse(name: String, content: String, profId: Int) : (Boolean,Int) = {
     val course = new Course(name, Nil, content, profId, Nil)
     listCourses = course :: listCourses
-    true
+    (true,course.getID)
   }
 
   def getCourse(cid: Long) : Option[Course] = {

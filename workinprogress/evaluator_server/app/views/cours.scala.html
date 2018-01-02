@@ -4,7 +4,9 @@
  *@
 @(message: String, connected: Boolean, user: model.User, cl: List[model.Course], c: model.Course = null)(implicit flash: Flash)
 
-@script = {}
+@script = {
+	$("#evaluatorNavbar").find("a:contains('Cours')").parent().addClass('active');
+}
 
 @*
  * Call the `main` template with two arguments. The first
@@ -20,12 +22,34 @@
 		<div class="jumbotron">
 			@c.getContent
 		</div>
+		<h2>Ajouter un questionnaire</h1>
+		<div class="list-group">
+			<a href="/cours/@c.getID/newsurvey.html" class="list-group-item list-group-item-action">Cliquez ici pour ajouter un questionnaire</a>
+		</div>
+		@if(c.getSurveys == Nil || c.getSurveys.size == 0) {
+			<h1>Questionnaires</h1>
+			<div class="alert alert-info">
+				Ce cours ne contient aucun questionnaires.
+			</div>
+		} else {
+			<h1>Questionnaires</h1>
+			<div class="list-group">
+				@for(s <- c.getSurveys) {
+					<a href="#" class="list-group-item list-group-item-action">@s.toString</a>
+				}
+			</div>
+		}
 	</div>
 </div>		
 } else {
 <div class="container-fluid">
 	<div class="jumbotron">
-		<h1>Ajouter un cours</h1>
+		@if(flash.get("courseSuccess")) {
+			<div class="alert alert-success">
+				Le cours a été enregistré avec succès !
+			</div>
+		}
+		<h2>Ajouter un cours</h1>
 		<div class="list-group">
 			<a href="/newcours.html" class="list-group-item list-group-item-action">Cliquez ici pour ajouter un cours</a>
 		</div>

@@ -46,4 +46,5 @@ class Course(nom:String,survl: List[Survey], cont: String, idProf: Int, listStud
   def getContent : String = return content
   def getIDProf : Int = return idP
   def getID : Int = return idC
+  def getSurveys: List[Survey] = return surveyl
 }

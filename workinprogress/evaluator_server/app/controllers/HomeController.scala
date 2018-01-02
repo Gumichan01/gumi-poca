@@ -85,7 +85,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
       Unauthorized("Accès non autorisé. Veuillez vous connecter !")
     }
   }
-
+  
   def listeQuestionnaires(cid: Long) = Action { implicit request =>
     request.session.get("connected").map { user =>
       Server.userWithSurname(user) match {
@@ -100,7 +100,13 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
   def nouveauQuestionnaire(cid: Long) = Action { implicit request =>
     request.session.get("connected").map { user =>
       Server.userWithSurname(user) match {
-        case t: Some[Professor] => Ok(views.html.newsurvey("Nouveau Questionnaire", true, t.get, cid))
+        case t: Some[Professor] => {
+          val theCourse = Server.getCourse(cid)
+          theCourse match {
+            case Some(aCourse) => Ok(views.html.newsurvey("Nouveau Questionnaire", true, t.get, aCourse))
+            case None => BadRequest("Cours non existant !")
+          }
+        }
         case s: Some[Student] => Unauthorized("Accès réservé aux professeurs !")
         case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
       }

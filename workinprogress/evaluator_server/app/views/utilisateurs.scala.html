@@ -4,7 +4,9 @@
  *@
 @(message: String, connected: Boolean, user: model.User, allUsers: List[model.User])(implicit flash: Flash)
 
-@script = {}
+@script = {
+	$("#evaluatorNavbar").find("a:contains('Utilisateurs')").parent().addClass('active');
+}
 
 @*
  * Call the `main` template with two arguments. The first

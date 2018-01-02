@@ -132,11 +132,10 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
   }
 
   def newCourse = Action { implicit request =>
-    println("Contenu Request : " + request.body.asJson)
     val (profId, name, content) = courseForm.bindFromRequest.get
     val result = serverInstance.addCourse(name, content, profId)
-    result match {
-      case true => Redirect("/").flashing("courseSuccess" -> "true")
+    result._1 match {
+      case true => Redirect("/cours/" + result._2 + ".html").flashing("courseSuccess" -> "true")
       case false => Redirect("/newcours.html").flashing("courseFailure" -> "true")
     }
   }
