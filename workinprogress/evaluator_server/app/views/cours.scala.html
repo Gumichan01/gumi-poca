@@ -16,15 +16,22 @@
 @main(message, connected, user)(script) {
 
 @if(c != null) {
+	@if(flash.get("susbcribeSuccess")) {
+	<div class="alert alert-success">
+		Vous êtes maintenant inscrit à ce cours !
+	</div>
+	}
+	
+	@if(flash.get("susbcribeFailure")) {
+	<div class="alert alert-danger">
+		Une erreur s'est produite. Veuillez réessayer !
+	</div>
+	}
 <div class="container-fluid">
 	<div class="jumbotron">
 		<h1>Cours @c.getName</h1>
 		<div class="jumbotron">
-			@c.getContent
-		</div>
-		<h2>Ajouter un questionnaire</h1>
-		<div class="list-group">
-			<a href="/cours/@c.getID/newsurvey.html" class="list-group-item list-group-item-action">Cliquez ici pour ajouter un questionnaire</a>
+			@Html(c.getContent)
 		</div>
 		@if(c.getSurveys == Nil || c.getSurveys.size == 0) {
 			<h1>Questionnaires</h1>
@@ -39,6 +46,21 @@
 				}
 			</div>
 		}
+		<h3>Ajouter un questionnaire</h3>
+		<div class="list-group">
+			<a href="/cours/@c.getID/newsurvey.html" class="list-group-item list-group-item-action">Cliquez ici pour ajouter un questionnaire</a>
+		</div>
+		<h1>Etudiants</h1>
+		<div class="list-group">
+			<a href="#" class="list-group-item list-group-item-action">@c.getStudents.size étudiants inscrits</a>
+			@if(user.isInstanceOf[model.Student]) {
+				@if(c.getStudents.contains(user.getID)) {
+					<a href="#" class="list-group-item list-group-item-action">Vous êtes déjà inscrit !</a>
+				} else {
+					<a href="/api/suscribe/@c.getID" class="list-group-item list-group-item-action">S'inscrire à ce cours</a>					
+				}
+			}
+		</div>
 	</div>
 </div>		
 } else {

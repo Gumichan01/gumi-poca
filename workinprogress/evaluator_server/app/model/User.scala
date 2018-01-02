@@ -6,7 +6,7 @@ package model
 
 object userId {
   private var init: Int =0;
-  val _id : Int = {init = init+1; init};
+  def _id : Int = {init = init+1; init};
 }
 
 abstract class User (n: String, sN: String, p: String) {

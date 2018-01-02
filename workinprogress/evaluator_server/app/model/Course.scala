@@ -3,9 +3,9 @@
  */
 package model
 
-object Cid{
+object Cid {
     private var pcid : Int = 0;
-    val _id : Int = { pcid = pcid + 1; pcid};
+    def _id : Int = { pcid = pcid + 1; pcid};
 }
 
 class Course(nom:String,survl: List[Survey], cont: String, idProf: Int, listStudent: List[Int]) {
@@ -28,13 +28,13 @@ class Course(nom:String,survl: List[Survey], cont: String, idProf: Int, listStud
   }
   
   def addSurvey(s: Survey) = {
-    surveyl.+:(s);
+    surveyl = s :: surveyl
   }
   def removeSurvey(s:Survey)={
     surveyl.filterNot(elem=> elem ==s);
   }
   def addStudent(i: Int)={
-    listS.+:(i);
+    listS = i :: listS
   }
   def removeStudent(i: Int)={
     listS.filterNot(elem=>elem==i);
@@ -47,4 +47,5 @@ class Course(nom:String,survl: List[Survey], cont: String, idProf: Int, listStud
   def getIDProf : Int = return idP
   def getID : Int = return idC
   def getSurveys: List[Survey] = return surveyl
+  def getStudents: List[Int] = return listS
 }

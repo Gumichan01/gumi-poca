@@ -140,6 +140,17 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
     }
   }
 
+  def suscribe(cid: Long) = Action { implicit request =>
+    request.session.get("connected").map { user =>
+      (serverInstance.studentSuscribes(cid, user)) match {
+        case true => Redirect("/cours/" + cid + ".html").flashing("susbcribeSuccess" -> "true")
+        case false => Redirect("/cours/" + cid + ".html").flashing("suscribeFailure" -> "true")
+      }
+    }.getOrElse {
+      Ok(views.html.inscription("Inscription", false, null))
+    }
+  }
+
   // Pour parser du JSON
   /*
   def saveCourse = Action(parse.json) { implicit request =>
@@ -157,7 +168,67 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
 
   // Quizz/Questionnaires
 
-  def listQuizz(cid: Long) = Action {
+  def newSurvey = Action { implicit request =>
+    (request.body.asFormUrlEncoded) match {
+      case Some(bodyFormatted) => interpretSurveyBody(bodyFormatted)
+      case None => BadRequest("Bad request")
+    }
+  }
+
+  def interpretSurveyBody(body: Map[String, Seq[String]]) : Result = {
+    var courseIdOpt = body.get("courseId")
+    var questionsCount = 1
+    var continueInterpreting = true
+    var allQuestions: List[Question] = Nil
+    var allQcmQuestions: List[MultipleChoiceQuestion] = Nil
+    var survey: Survey = MCSurvey(Nil)
+
+    // var allSourceCodeQuestions: List[]
+
+    if (courseIdOpt == None)
+      BadRequest("No Course ID")
+
+    val courseId = courseIdOpt.get.head
+
+    while (continueInterpreting) {
+      var questionType = body.get(questionsCount + "questionType")
+
+      if (questionType == None)
+        continueInterpreting = false
+
+      (questionType.get.head) match {
+        case "qcm" => {
+          val possibilitiesCount = body.get(questionsCount + "qcmPossibilities").get.head.toInt
+          val intitule = body.get(questionsCount + "questionQuestion").get.head
+          var answers: List[Answer] = Nil
+          var goodAnswers: List[Answer] = Nil
+
+          for (i <- 0 to possibilitiesCount) {
+            val currentPossibility = body.get(questionsCount + "qcmString" + (i+1)).get.head
+            answers = (new TextAnswer(currentPossibility)) :: answers
+          }
+
+          val goodAnswersFromForm = body.get(questionsCount + "goodAnswers").get.head.split('|')
+
+          for (ga <- goodAnswersFromForm) {
+            goodAnswers = (answers(ga.toInt - 1)) :: goodAnswers
+          }
+
+          val qcmQuestion = new MultipleChoiceQuestion(intitule, answers, goodAnswers)
+          allQcmQuestions = qcmQuestion :: Nil
+
+          survey = MCSurvey(allQcmQuestions)
+        }
+        case "code" => {
+          Ok("ok")
+        }
+      }
+    }
+
+    Ok("ok")
+  }
+
+  def listSurveys(cid: Long) = Action {
     Ok("Request all quizz with course Id " + cid)
   }
 }
