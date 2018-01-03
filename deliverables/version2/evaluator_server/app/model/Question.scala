@@ -14,6 +14,7 @@ trait QuestionWithCheckablaAnswer {
 }
 
 trait QuestionWithMedia {
+    def checkMedia(a: MediaAnswer): Boolean
     def check(a: Answer): Boolean
 }
 
@@ -52,7 +53,18 @@ case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], gansw
 case class CodeSubmissionQuestion(sentence: String, tests: List[TestCase])
     extends Question(sentence) with QuestionWithMedia {
 
-    def check(a: Answer) = true
+    def checkMedia(a: MediaAnswer) = {
+
+        true
+    }
+
+    def check(a: Answer): Boolean = {
+
+        a match {
+            case ma: MediaAnswer => { checkMedia(ma) }
+            case _               => false
+        }
+    }
 }
 
 object QMain {
