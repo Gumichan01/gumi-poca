@@ -5,29 +5,33 @@
 package model
 
 object Qid {
-    private var pqid : Int = 0
-    val _id : Int = { pqid = pqid + 1; pqid}
+    private var pqid: Int = 0
+    val _id: Int = { pqid = pqid + 1; pqid }
 }
 
 trait QuestionWithCheckablaAnswer {
-    def isGoodAnswer (a: List[Answer]) : Boolean
+    def isGoodAnswer(a: List[Answer]): Boolean
 }
 
 trait QuestionWithMedia {
-    def checkMedia () : Boolean
+    def check(a: Answer): Boolean
 }
 
-trait TestCase {
-    
+// Class to instantiate with
+abstract class TestCase {
+
     type Input
     type Expected
+
+    def input: Input
+    def expected: Expected
 }
 
 abstract class Question(sentence: String) {
 
     private val idq = Qid._id
-    def text : String = sentence;
-    def id : Int = idq
+    def text: String = sentence;
+    def id: Int = idq
 }
 case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], ganswer: List[Answer])
     extends Question(sentence) with QuestionWithCheckablaAnswer {
@@ -35,7 +39,7 @@ case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], gansw
     // Constructor
     ganswer match {
         case List() => throw new IllegalArgumentException("No good answer has been given")
-        case _  => {
+        case _ => {
 
             if (!ganswer.forall(answerl.contains))
                 throw new IllegalArgumentException("The good answer is not in the list of answers")
@@ -43,19 +47,17 @@ case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], gansw
     }
 
     // Methods
-    def isGoodAnswer (a: List[Answer]) : Boolean = a.toSet == ganswer.toSet
+    def isGoodAnswer(a: List[Answer]): Boolean = a.toSet == ganswer.toSet
 }
 case class CodeSubmissionQuestion(sentence: String, tests: List[TestCase])
     extends Question(sentence) with QuestionWithMedia {
-  
-    def checkMedia = true
+
+    def check(a: Answer) = true
 }
-
-
 
 object QMain {
 
-    def main(args: Array[String]) : Unit = {
+    def main(args: Array[String]): Unit = {
 
         val l = List(new TextAnswer("yes"), new TextAnswer("no"));
         val g = new TextAnswer("yes");
