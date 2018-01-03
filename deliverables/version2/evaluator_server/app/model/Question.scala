@@ -17,6 +17,12 @@ trait QuestionWithMedia {
     def checkMedia () : Boolean
 }
 
+trait TestCase {
+    
+    type Input
+    type Expected
+}
+
 abstract class Question(sentence: String) {
 
     private val idq = Qid._id
@@ -39,11 +45,13 @@ case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], gansw
     // Methods
     def isGoodAnswer (a: List[Answer]) : Boolean = a.toSet == ganswer.toSet
 }
-case class SubmissionQuestion(sentence: String) 
+case class CodeSubmissionQuestion(sentence: String, tests: List[TestCase])
     extends Question(sentence) with QuestionWithMedia {
   
     def checkMedia = true
 }
+
+
 
 object QMain {
 
