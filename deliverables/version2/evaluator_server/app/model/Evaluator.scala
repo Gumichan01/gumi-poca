@@ -4,14 +4,14 @@ import scala.io.StdIn;
 
 object Qevaluator {
 
-    var lsurvey : List[Survey] = List()
+    var lsurvey: List[Survey] = List()
 
     def main(args: Array[String]): Unit = {
 
         var go = true
         println("Evaluator 1.0")
 
-        while(go) {
+        while (go) {
             println("What do you want to do?")
             println("1: Create a survey")
             println("2: Quiz")
@@ -21,26 +21,27 @@ object Qevaluator {
 
             n match {
                 case 1 => createSurvey
-                case 2 => { quiz(lsurvey) match {
-                        case None => println("Passing...")
-                        case Some((g,t)) => println("Your score : " + g + "/" + t);
+                case 2 => {
+                    quiz(lsurvey) match {
+                        case None         => println("Passing...")
+                        case Some((g, t)) => println("Your score : " + g + "/" + t);
                     }
                 }
                 case 3 => go = false
                 case _ => throw new IllegalArgumentException("invalid argument")
-            }   // match
-        }       // while
+            } // match
+        } // while
     }
 
-    def createSurvey : Boolean = {
+    def createSurvey: Boolean = {
 
         println("Create multiple choice question")
-        var answers      : List[Answer]   = List()
-        var good_answers : List[Answer]   = List()
-        var questions    : List[MultipleChoiceQuestion] = List()
+        var answers: List[Answer] = List()
+        var good_answers: List[Answer] = List()
+        var questions: List[MultipleChoiceQuestion] = List()
 
         do {
-            answers      = List()
+            answers = List()
             good_answers = List()
 
             println("Write the first question:")
@@ -50,7 +51,7 @@ object Qevaluator {
             val array = StdIn.readLine().split('|')
 
             var i = 0
-            for(a <- array) {
+            for (a <- array) {
                 i = i + 1
                 println(i + ": " + a)
                 answers = answers ++: List[Answer](new TextAnswer(a))
@@ -59,7 +60,7 @@ object Qevaluator {
             println("What is/are the good answer(s) (if there are several answers write their id  with '|' as a separator)?")
             val arint = StdIn.readLine().split('|')
 
-            for(ga <- arint) {
+            for (ga <- arint) {
                 good_answers = good_answers ++: List[Answer](answers(ga.toInt - 1))
             }
 
@@ -67,18 +68,18 @@ object Qevaluator {
             val quest = new MultipleChoiceQuestion(q, answers, good_answers)
             questions = questions :+ quest
             println("Do want to write another question (y|n)?")
-        } while(StdIn.readLine() == "y")
+        } while (StdIn.readLine() == "y")
 
         println("Generate the survey")
-        val s : Survey = new MCSurvey(questions)
+        val s: Survey = new MCSurvey(questions)
         lsurvey = lsurvey ++: List[Survey](s)
         return true
     }
 
-    def quiz(ls: List[Survey]) : Option[(Int,Int)] = {
+    def quiz(ls: List[Survey]): Option[(Int, Int)] = {
         if (ls.isEmpty) {
-          println("No surveys, create one first!")
-          return None
+            println("No surveys, create one first!")
+            return None
         }
 
         println("Which survey do you want to answer ?")
@@ -88,49 +89,49 @@ object Qevaluator {
         val choice = StdIn.readInt()
 
         try {
-          ls(choice-1) match {
-            case mcs: MCSurvey => return _interactiveMCSurvey(mcs)
-            case _ => println("Unhandled survey")
-          }
-        }
-        catch {
-          case e: IndexOutOfBoundsException => println("Invalid argument")
+            ls(choice - 1) match {
+                case mcs: MCSurvey => return _interactiveMCSurvey(mcs)
+                case _             => println("Unhandled survey")
+            }
+        } catch {
+            case e: IndexOutOfBoundsException => println("Invalid argument")
         }
 
         return None
     }
 
-    def _interactiveMCSurvey(s: MCSurvey) : Option[(Int, Int)] = {
-      var sheet = new AnswerSheet(s.id)
+    def _interactiveMCSurvey(s: MCSurvey): Option[(Int, Int)] = {
+        var sheet = new AnswerSheet(s.id)
 
-      for (question <- s.questionl) {
-        println("Question: " + question.text)
+        for (question <- s.questionl) {
+            println("Question: " + question.text)
 
-        var count = 0
+            var count = 0
 
-        for (answer <- question.answerl) {
-          answer match {
-            case t: TextAnswer => {
-              count += 1
-              println(count + ") " + t.content)
+            for (answer <- question.answerl) {
+                answer match {
+                    case t: TextAnswer => {
+                        count += 1
+                        println(count + ") " + t.content)
+                    }
+                    case _ => "Not handled type"
+                }
             }
-            case _ => "Not handled type"
-          }
+
+            println("Your answer : ")
+            val userInput = StdIn.readInt()
+            val userAnswer = question.answerl(userInput - 1)
+
+            // We're forced for the moment because content
+            // is available only on TextAnswer (for the moment!)
+
+            userAnswer match {
+                case t: TextAnswer =>
+                    val ta = TextAnswer(t.content); sheet.addAnswer(ta, question.id)
+                case _             => "Not handled type"
+            }
         }
 
-        println("Your answer : ")
-        val userInput = StdIn.readInt()
-        val userAnswer = question.answerl(userInput-1)
-
-        // We're forced for the moment because content
-        // is available only on TextAnswer (for the moment!)
-
-        userAnswer match {
-          case t: TextAnswer => val ta = TextAnswer(t.content) ; sheet.addAnswer(ta, question.id)
-          case _ => "Not handled type"
-        }
-      }
-
-      return Some((s.check(sheet),s.questionl.length))
+        return Some((s.check(sheet), s.questionl.length))
     }
 }
