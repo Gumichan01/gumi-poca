@@ -27,7 +27,8 @@ abstract class Survey(questionl: List[Question]) {
         "Survey with id = " + id
     }
 }
-case class MCSurvey(questionl: List[MultipleChoiceQuestion]) extends Survey(questionl) with WithCheckableQA {
+case class MCSurvey(questionl: List[MultipleChoiceQuestion])
+    extends Survey(questionl) with WithCheckableQA {
 
     // Private
     protected def getQuestion(ql: List[MultipleChoiceQuestion], id: Int): MultipleChoiceQuestion = {
@@ -65,6 +66,11 @@ case class MCSurvey(questionl: List[MultipleChoiceQuestion]) extends Survey(ques
     }
 }
 // TODO Survey that contains every types of questions
+case class GSurvey(questionl: List[Question])
+    extends Survey(questionl) with WithCheckableQA {
+    
+    def check(answer_sh: AnswerSheet) = 0
+}
 
 object SMain {
 
