@@ -29,11 +29,20 @@ object Server {
     val ta33 = new TextAnswer("Au typage faible")
     val q3 = new MultipleChoiceQuestion("Quelles sont les particularités de Scala ?", (ta31::ta32::ta33::Nil), (ta31::ta32::Nil))
 
-    val s : Survey = new MCSurvey(q1::q2::q3::Nil)
+    val s1 : Survey = new MCSurvey(q1::q2::q3::Nil)
+    val course = new Course("POOCAv", (s1 :: Nil), "Cours de POO Concepts Avancés<br />Apprenons le Scala !", prof.getID, listStudents.map {_.getID})
 
-    val course = new Course("POOCAv", (s :: Nil), "Cours de POO Concepts Avancés<br />Apprenons le Scala !", prof.getID, listStudents.map {_.getID})
+    val scq1 = new SourceCodeQuestion("Créez une fonction nommée 'fibo' qui prend en entrée un entier et retourne la valeur de la suite de Fibonnacci associée",
+      "fibo",
+      ("7", "13")::("8", "21")::Nil
+    )
 
-    listCourses = course :: Nil
+    val s2 : Survey = new CodeSurvey(scq1 :: Nil)
+
+    val course2 = new Course("Python", (s2::Nil), "Cours de Python<br />Testez vous en Python !", prof.getID, listStudents.map {_.getID})
+
+    listCourses = course :: course2 :: Nil
+    listSurveys = s1 :: Nil
   }
 
   def addUser(surname: String, name: String, password: String, role: String) : Boolean = {
@@ -124,7 +133,7 @@ object Server {
     }
   }
 
-  def evaluateAnswerSheet(survey: MCSurvey, sheet: AnswerSheet) : Int = {
+  def evaluateAnswerSheet(survey: WithCheckableQA, sheet: AnswerSheet) : Int = {
     val score = survey.check(sheet)
     score
   }

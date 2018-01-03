@@ -45,8 +45,32 @@
 				</form>
 			</div>
 		</div>
-
 	} else {
-		
+		@if(survey.isInstanceOf[model.CodeSurvey]) {
+			<div class="container-fluid">
+				<div class="jumbotron">
+					@if(flash.get("result")) {
+						<div class="alert alert-success">
+							@flash.get("result")
+						</div>
+					}
+					<h1>Questionnaire</h1>
+					<form method="post" action="/api/answersheet" id="surveyForm">
+						<input type="hidden" id="hidden" name="surveyType" value="code">
+						<input type="hidden" id="hidden" name="surveyId" value="@survey.id">
+						<input type="hidden" id="hidden" name="courseId" value="@courseId">
+						@for(q <- survey.asInstanceOf[model.CodeSurvey].questionl) {
+							<div class="form-group">
+								<label for="intitule">@q.asInstanceOf[model.SourceCodeQuestion].sentence</label>
+								<textarea class="form-control" rows="5" id="answer" name="answer@q.id" placeholder="Entrez ici la définition de votre fonction"></textarea>
+							</div>
+						}
+						<div class="form-group">
+							<button type="submit" class="btn btn-primary">Soumettre</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		}
 	}
 }

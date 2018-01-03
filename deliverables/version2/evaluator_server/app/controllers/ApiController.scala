@@ -236,7 +236,35 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
             BadRequest("Aucun Questionnaire avec ces identifiants")
           }
         }
-        case "code" => BadRequest("Pas encore géré...")
+        case "code" => {
+          if (surveyOpt != None) {
+            val survey = surveyOpt.get.asInstanceOf[CodeSurvey]
+            val numberOfQuestions = surveyOpt.get.numberOfQuestions
+            val sheet = new AnswerSheet(surveyId.toInt)
+
+            for (q <- survey.questionl) {
+              val currentAnswerOpt = fBody.get("answer" + q.id)
+              if (currentAnswerOpt == None) {
+                val t = CodeAnswer("nullresponse")
+                sheet.addAnswer(t, q.id)
+              }
+              else {
+                val currentAnswer = currentAnswerOpt.get.head
+                val ca = CodeAnswer(currentAnswer)
+                sheet.addAnswer(ca, q.id)
+              }
+            }
+
+            val result = Server.evaluateAnswerSheet(survey, sheet)
+            val numberOfExpectations = survey.questionl.foldLeft(0) { _ + _.ganswer.size }
+            val retFlash = "Votre score : " + result + " / " + numberOfExpectations
+
+            Redirect("/cours/"+courseId+"/surveys/"+surveyId+".html").flashing("result" -> retFlash)
+          }
+          else {
+            BadRequest("Aucun Questionnaire avec ces identifiants")
+          }
+        }
       }
     }
   }

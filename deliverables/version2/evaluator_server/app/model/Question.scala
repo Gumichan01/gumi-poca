@@ -4,6 +4,9 @@
 
 package model
 
+import java.io._
+import sys.process._
+
 object Qid {
     private var pqid : Int = 0
     def _id : Int = { pqid = pqid + 1; pqid}
@@ -35,6 +38,8 @@ case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], gansw
     // Methods
     def isGoodAnswer (a: List[Answer]) : Boolean = a.toSet == ganswer.toSet
 }
+
+case class SourceCodeQuestion(sentence: String, functionName: String, ganswer: List[(String, String)]) extends Question(sentence)
 
 object QMain {
 

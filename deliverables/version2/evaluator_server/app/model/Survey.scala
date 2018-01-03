@@ -5,6 +5,9 @@
 
 package model
 
+import java.io.{BufferedWriter, File, FileWriter}
+import sys.process._
+
 object Survey {
     private var psid : Int = 0
     private def getId : Int = { psid += 1; psid}
@@ -63,6 +66,44 @@ case class MCSurvey(questionl: List[MultipleChoiceQuestion]) extends Survey(ques
 
             case _  => acc
         }   // match
+    }
+}
+
+case class CodeSurvey(questionl: List[SourceCodeQuestion]) extends Survey(questionl) with WithCheckableQA {
+    override def check(answer_sh: AnswerSheet): Int = {
+        var score = 0
+
+        for (q <- questionl) {
+            for (expectation <- q.ganswer) {
+                val file = new File("tmp/" + "sourceCodeQuestion" + id + ".py")
+                val bw = new BufferedWriter(new FileWriter(file))
+
+                var fileContent = "import sys\n\n"
+
+                val userAnswer = answer_sh.getAnswers.filter(_._2 == q.id)
+
+                fileContent += userAnswer.head._1.asInstanceOf[CodeAnswer].sourceCode
+                fileContent += "\n\n"
+
+                fileContent += "sys.exit("+ q.functionName + "(" + expectation._1 + "))"
+
+                bw.write(fileContent)
+                bw.close()
+
+                val resultCode = "python " + file.getAbsolutePath() !
+                val resultFormat = "python " + file.getAbsolutePath() lineStream_!
+
+                if (resultFormat.size > 0) {
+                    println("ERROR MAYBE NO ?")
+                }
+
+                if (resultCode.toString == expectation._2) {
+                    score += 1
+                }
+            }
+        }
+
+        score
     }
 }
 

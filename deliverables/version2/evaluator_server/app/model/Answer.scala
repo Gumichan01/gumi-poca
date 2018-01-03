@@ -24,6 +24,10 @@ case class TextAnswer(text: String) extends Answer with ComparableAnswer[String]
     def content = text
     def == (a: ComparableAnswer[String]) = content == a.content
 }
+
+case class CodeAnswer(sourceCode: String, language: String = "Python") extends Answer {
+    def content = sourceCode
+}
 // Media Answer
 /*
 case class MediaAnswer(media: Media) extends Answer with CheckableAnswer[Media] {
