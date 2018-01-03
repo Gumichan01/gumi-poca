@@ -122,7 +122,7 @@ object SMain {
         var ans2 = new TextAnswer("3");
         var ans3 = new TextAnswer("4");
         var ans4 = new TextAnswer("5");
-        var ans5 = new TextAnswer("24");
+        var ans5 = new MediaAnswer(new SourceCode("24"));
         // var prof = new Professor("Jean", "Pierre");
         // var student = new Student("Michael","Fail");
 
