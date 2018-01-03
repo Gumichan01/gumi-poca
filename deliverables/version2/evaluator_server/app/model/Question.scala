@@ -13,6 +13,10 @@ trait QuestionWithCheckablaAnswer {
     def isGoodAnswer (a: List[Answer]) : Boolean
 }
 
+trait QuestionWithMedia {
+    def checkMedia () : Boolean
+}
+
 abstract class Question(sentence: String) {
 
     private val idq = Qid._id
@@ -35,6 +39,11 @@ case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], gansw
     // Methods
     def isGoodAnswer (a: List[Answer]) : Boolean = a.toSet == ganswer.toSet
 }
+case class SubmissionQuestion(sentence: String) 
+    extends Question(sentence) with QuestionWithMedia {
+  
+    def checkMedia = true
+}
 
 object QMain {
 
@@ -44,7 +53,7 @@ object QMain {
         val g = new TextAnswer("yes");
         val q = new MultipleChoiceQuestion("Are you stupid?", l, List(g));
         println(q.text);
-        println("expected false; got: " + (q isGoodAnswer List(new TextAnswer("y")) ) );
+        println("expected false; got: " + (q isGoodAnswer List(new TextAnswer("y"))));
         println("expected true; got: " + (q isGoodAnswer List(g)));
     }
 }
