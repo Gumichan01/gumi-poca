@@ -4,6 +4,8 @@
 
 package model
 
+import scala.sys.process._
+
 object Qid {
     private var pqid: Int = 0
     val _id: Int = { pqid = pqid + 1; pqid }
@@ -54,6 +56,18 @@ case class CodeSubmissionQuestion(sentence: String, tests: List[TestCase])
     extends Question(sentence) with QuestionWithMedia {
 
     def checkMedia(a: MediaAnswer) = {
+
+        a.media match {
+            case code: SourceCode => {
+                /// Execute the script with pyhon3
+                //val content = "python3 ".lineStream;
+                //for (c <- content)
+                    //println(c);
+
+                true
+            }
+            case _ =>
+        }
 
         true
     }
