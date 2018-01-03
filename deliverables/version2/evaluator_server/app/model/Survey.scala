@@ -57,7 +57,7 @@ case class MCSurvey(questionl: List[MultipleChoiceQuestion]) extends Survey(ques
 
             case (a, i)::q => {
 
-                val question = questionl.filter(_.id==i).head
+                val question = questionl.filter(_.id == i).head
                 check_(q, (if (question isGoodAnswer List(a)) (g + 1) else acc ))
             }
 

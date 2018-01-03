@@ -127,7 +127,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
         case Some(userModel) => {
           val survey = Server.getSurvey(cid, sid)
           survey match {
-            case Some(s) => Ok(views.html.survey("Questionnaire", true, userModel, sid, s))
+            case Some(s) => Ok(views.html.survey("Questionnaire", true, userModel, cid, s))
             case None => BadRequest("Aucun questionnaire avec cet identifiant !")
           }
         }

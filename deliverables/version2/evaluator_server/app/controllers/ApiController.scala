@@ -4,13 +4,12 @@ import javax.inject._
 
 import play.api.data._
 import play.api.data.Forms._
-import play.api.mvc._
+import play.api.mvc.{request, _}
 import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
 
 import scala.collection.mutable.ListBuffer
-
 import model._
 
 
@@ -169,9 +168,23 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
   // Quizz/Questionnaires
 
   def newSurvey = Action { implicit request =>
-    (request.body.asFormUrlEncoded) match {
-      case Some(bodyFormatted) => interpretSurveyBody(bodyFormatted)
-      case None => BadRequest("Bad request")
+    request.session.get("connected").map { user =>
+      Server.userWithSurname(user) match {
+        case Some(u) => {
+          u match {
+            case p: Professor => {
+              (request.body.asFormUrlEncoded) match {
+                case Some(bodyFormatted) => interpretSurveyBody(p, bodyFormatted)
+                case None => BadRequest("Bad request")
+              }
+            }
+            case s: Student => Unauthorized("Accès réservé aux professeurs !")
+          }
+        }
+        case None => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+      }
+    }.getOrElse {
+      Unauthorized("Accès non autorisé. Veuillez vous connecter !")
     }
   }
 
@@ -191,25 +204,33 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
       surveyType match {
         case "qcm" => {
           if (surveyOpt != None) {
+            val survey = surveyOpt.get.asInstanceOf[MCSurvey]
             val numberOfQuestions = surveyOpt.get.numberOfQuestions
             val sheet = new AnswerSheet(surveyId.toInt)
-            for (i <- 1 to numberOfQuestions) {
-              val currentAnswer = fBody.get("answer" + i).get
-              if (currentAnswer.size == 1) {
-                val t = TextAnswer(currentAnswer.head)
-                sheet.addAnswer(t, i)
-              } else {
-                for (ua <- currentAnswer) {
-                  val t = TextAnswer(ua)
-                  sheet.addAnswer(t, i)
+            for (q <- survey.questionl) {
+              val currentAnswerOpt = fBody.get("answer" + q.id)
+              if (currentAnswerOpt == None) {
+                val t = TextAnswer("nullresponse")
+                sheet.addAnswer(t, q.id)
+              }
+              else {
+                val currentAnswer = currentAnswerOpt.get
+                if (currentAnswer.size == 1) {
+                  val t = TextAnswer(currentAnswer.head)
+                  sheet.addAnswer(t, q.id)
+                } else {
+                  for (ua <- currentAnswer) {
+                    val t = TextAnswer(ua)
+                    sheet.addAnswer(t, q.id)
+                  }
                 }
               }
             }
 
-            val score = surveyOpt.get.asInstanceOf[MCSurvey].check(sheet)
-            val result = "Votre score : " + score + " / " + numberOfQuestions
+            val result = Server.evaluateAnswerSheet(survey, sheet)
+            val retFlash = "Votre score : " + result + " / " + numberOfQuestions
 
-            Redirect("/cours/"+courseId+"/surveys/"+surveyId+".html").flashing("result" -> result)
+            Redirect("/cours/"+courseId+"/surveys/"+surveyId+".html").flashing("result" -> retFlash)
           }
           else {
             BadRequest("Aucun Questionnaire avec ces identifiants")
@@ -220,13 +241,12 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
     }
   }
 
-  def interpretSurveyBody(body: Map[String, Seq[String]]) : Result = {
+  def interpretSurveyBody(p: Professor, body: Map[String, Seq[String]]) : Result = {
     var courseIdOpt = body.get("courseId")
     var questionsCount = 1
     var continueInterpreting = true
     var allQuestions: List[Question] = Nil
     var allQcmQuestions: List[MultipleChoiceQuestion] = Nil
-    var survey: Survey = MCSurvey(Nil)
 
     // var allSourceCodeQuestions: List[]
 
@@ -238,39 +258,50 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
     while (continueInterpreting) {
       var questionType = body.get(questionsCount + "questionType")
 
-      if (questionType == None)
+      if (questionType == None) {
         continueInterpreting = false
+      } else {
+        (questionType.get.head) match {
+          case "qcm" => {
+            val possibilitiesCount = body.get(questionsCount + "qcmPossibilities").get.head.toInt
+            val intitule = body.get(questionsCount + "questionQuestion").get.head
+            var answers: List[Answer] = Nil
+            var goodAnswers: List[Answer] = Nil
 
-      (questionType.get.head) match {
-        case "qcm" => {
-          val possibilitiesCount = body.get(questionsCount + "qcmPossibilities").get.head.toInt
-          val intitule = body.get(questionsCount + "questionQuestion").get.head
-          var answers: List[Answer] = Nil
-          var goodAnswers: List[Answer] = Nil
+            for (i <- 1 to possibilitiesCount) {
+              val currentPossibility = body.get(questionsCount + "qcmString" + (i)).get.head
+              answers = answers :+ (new TextAnswer(currentPossibility))
+            }
 
-          for (i <- 0 to possibilitiesCount) {
-            val currentPossibility = body.get(questionsCount + "qcmString" + (i+1)).get.head
-            answers = (new TextAnswer(currentPossibility)) :: answers
+            val goodAnswersFromForm = body.get(questionsCount + "goodAnswers").get.head.split('|')
+
+            for (ga <- goodAnswersFromForm) {
+              goodAnswers = (answers(ga.toInt - 1)) :: goodAnswers
+            }
+
+            val qcmQuestion = new MultipleChoiceQuestion(intitule, answers, goodAnswers)
+            allQcmQuestions = allQcmQuestions :+ qcmQuestion
+
+            questionsCount += 1
           }
-
-          val goodAnswersFromForm = body.get(questionsCount + "goodAnswers").get.head.split('|')
-
-          for (ga <- goodAnswersFromForm) {
-            goodAnswers = (answers(ga.toInt - 1)) :: goodAnswers
+          case "code" => {
+            Ok("ok")
           }
-
-          val qcmQuestion = new MultipleChoiceQuestion(intitule, answers, goodAnswers)
-          allQcmQuestions = qcmQuestion :: Nil
-
-          survey = MCSurvey(allQcmQuestions)
-        }
-        case "code" => {
-          Ok("ok")
         }
       }
     }
 
-    Ok("ok")
+    val survey = MCSurvey(allQcmQuestions)
+    Server.addSurvey(survey)
+
+    val course = Server.getCourse(courseId.toLong)
+
+    course match {
+      case Some(c) => p.addQuestionnaire(survey, c)
+      case None => BadRequest("Pas de cours associé")
+    }
+
+    Redirect("/cours/" + courseId + ".html")
   }
 
   def listSurveys(cid: Long) = Action {
