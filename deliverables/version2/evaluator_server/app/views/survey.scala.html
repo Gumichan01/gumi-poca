@@ -1,0 +1,52 @@
+@*
+ * This template takes a single argument, a String containing a
+ * message to display.
+ *@
+@(message: String, connected: Boolean, user: model.User, courseId: Long, survey: model.Survey)(implicit flash: Flash)
+
+@script = {}
+
+@*
+ * Call the `main` template with two arguments. The first
+ * argument is a `String` with the title of the page, the second
+ * argument is an `Html` object containing the body of the page.
+ *@
+@main(message, connected, user)(script) {
+	@if(survey.isInstanceOf[model.MCSurvey]) {
+		<div class="container-fluid">
+			<div class="jumbotron">
+				@if(flash.get("result")) {
+					<div class="alert alert-success">
+						@flash.get("result")
+					</div>
+				}
+				<h1>Questionnaire</h1>
+				<form method="post" action="/api/answersheet" id="surveyForm">
+					<input type="hidden" id="hidden" name="surveyType" value="qcm">
+					<input type="hidden" id="hidden" name="surveyId" value="@survey.id">
+					<input type="hidden" id="hidden" name="courseId" value="@courseId">
+					@for(q <- survey.asInstanceOf[model.MCSurvey].questionl) {
+						<div class="form-group">
+							<label for="intitule">@q.asInstanceOf[model.MultipleChoiceQuestion].sentence</label>
+							<select multiple class="form-control" id="questionSelect" name="answer@q.id">
+								@for(a <- q.asInstanceOf[model.MultipleChoiceQuestion].answerl) {
+									@if(a.isInstanceOf[model.TextAnswer]) {
+										<option>@a.asInstanceOf[model.TextAnswer].content</option>
+									} else {
+										<option>Type Answer inconnu</option>
+									}
+								}
+							</select>
+						</div>
+					}
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">Soumettre</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	} else {
+		
+	}
+}

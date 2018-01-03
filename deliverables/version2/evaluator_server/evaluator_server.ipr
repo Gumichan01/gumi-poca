@@ -54,7 +54,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/evaluator_server.iml" filepath="$PROJECT_DIR$/.idea/modules/evaluator_server.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/evaluator_server-build.iml" filepath="$PROJECT_DIR$/.idea/modules/evaluator_server-build.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/workinprogress-evaluator_server.iml" filepath="$PROJECT_DIR$/.idea/modules/workinprogress-evaluator_server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/version2-evaluator_server.iml" filepath="$PROJECT_DIR$/.idea/modules/version2-evaluator_server.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
@@ -65,7 +65,7 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="ScalaCompilerConfiguration">
-    <profile name="SBT 1" modules="workinprogress-evaluator_server">
+    <profile name="SBT 1" modules="workinprogress-evaluator_server,version2-evaluator_server">
       <option name="deprecationWarnings" value="true" />
       <option name="uncheckedWarnings" value="true" />
       <parameters>
@@ -940,7 +940,16 @@
         <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-xml_2.12/srcs/scala-xml_2.12-1.0.6-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="sbt: org.scala-lang:scala-library:2.12.2:jar">
+    <library name="sbt: org.scala-lang:scala-library:2.12.2:jar" type="Scala">
+      <properties>
+        <compiler-classpath>
+          <root url="file://$USER_HOME$/.ivy2/cache/jline/jline/jars/jline-2.14.3.jar" />
+          <root url="file://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-xml_2.12/bundles/scala-xml_2.12-1.0.6.jar" />
+          <root url="file://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-compiler/jars/scala-compiler-2.12.2.jar" />
+          <root url="file://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.12.2.jar" />
+          <root url="file://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.12.2.jar" />
+        </compiler-classpath>
+      </properties>
       <CLASSES>
         <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.12.2.jar!/" />
       </CLASSES>

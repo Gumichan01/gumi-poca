@@ -16,13 +16,13 @@
 @main(message, connected, user)(script) {
 
 @if(c != null) {
-	@if(flash.get("susbcribeSuccess")) {
+	@if(flash.get("subscribeSuccess")) {
 	<div class="alert alert-success">
 		Vous êtes maintenant inscrit à ce cours !
 	</div>
 	}
 	
-	@if(flash.get("susbcribeFailure")) {
+	@if(flash.get("subscribeFailure")) {
 	<div class="alert alert-danger">
 		Une erreur s'est produite. Veuillez réessayer !
 	</div>
@@ -42,7 +42,7 @@
 			<h1>Questionnaires</h1>
 			<div class="list-group">
 				@for(s <- c.getSurveys) {
-					<a href="#" class="list-group-item list-group-item-action">@s.toString</a>
+					<a href="/cours/@c.getID/surveys/@(s.id).html" class="list-group-item list-group-item-action">@s.toString</a>
 				}
 			</div>
 		}

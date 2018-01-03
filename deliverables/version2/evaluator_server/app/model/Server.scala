@@ -26,8 +26,8 @@ object Server {
 
     val ta31 = new TextAnswer("Fonctionnel")
     val ta32 = new TextAnswer("Objet")
-    val ta33 = new TextAnswer("Au typage fort")
-    val q3 = new MultipleChoiceQuestion("Quelles sont les particularités de Scala ?", (ta31::ta32::ta33::Nil), (ta31::ta32::ta33::Nil))
+    val ta33 = new TextAnswer("Au typage faible")
+    val q3 = new MultipleChoiceQuestion("Quelles sont les particularités de Scala ?", (ta31::ta32::ta33::Nil), (ta31::ta32::Nil))
 
     val s : Survey = new MCSurvey(q1::q2::q3::Nil)
 
@@ -89,6 +89,25 @@ object Server {
     }
   }
 
+  def addSurvey(survey: Survey) : (Boolean,Int) = {
+    listSurveys = survey :: listSurveys
+    (true,survey.id)
+  }
+
+  def getSurvey(cid: Long, sid: Long) : Option[Survey] = {
+    val course = getCourse(cid)
+    course match {
+      case Some(c) => {
+        val fs = c.getSurveys.filter(_.id == sid)
+        fs.size match {
+          case 1 => Some(fs.head)
+          case 0 => None
+        }
+      }
+      case None => None
+    }
+  }
+
   def studentSuscribes(cid: Long, surname: String) : Boolean = {
     (userWithSurname(surname)) match {
       case Some(user) => {
@@ -103,5 +122,10 @@ object Server {
       }
       case None => false
     }
+  }
+
+  def evaluateAnswerSheet(survey: MCSurvey, sheet: AnswerSheet) : Int = {
+    val score = survey.check(sheet)
+    score
   }
 }

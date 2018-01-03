@@ -21,7 +21,8 @@ abstract class Survey(questionl: List[Question]) {
         throw new IllegalArgumentException("A survey cannot be empty")
 
     private val ids = Survey.getId
-    def id: Int = ids
+    def id : Int = ids
+    def numberOfQuestions: Int = questionl.size
 
     override def toString: String = {
         "Survey with id = " + id
@@ -58,8 +59,8 @@ case class MCSurvey(questionl: List[MultipleChoiceQuestion])
 
             case (a, i) :: q => {
 
-                val question = getQuestion(questionl, i)
-                check_(q, (if (question isGoodAnswer List(a)) (g + 1) else acc))
+                val question = questionl.filter(_.id == i).head
+                check_(q, (if (question isGoodAnswer List(a)) (g + 1) else acc ))
             }
 
             case _ => acc

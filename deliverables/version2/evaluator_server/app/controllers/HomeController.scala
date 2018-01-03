@@ -3,7 +3,7 @@ package controllers
 import javax.inject._
 
 import model._
-import play.api.mvc._
+import play.api.mvc.{request, _}
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -57,8 +57,6 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
       Server.userWithSurname(user) match {
         case Some(userModel) => {
           val reqCourse = Server.getCourse(cid)
-          println("Etudiants : " + reqCourse.get.getStudents)
-          println("User : " + userModel.getID)
           reqCourse match {
             case Some(theCourse) => Ok(views.html.cours("Cours " + theCourse.getName, true, userModel, null, theCourse))
             case _ => BadRequest("Cours non existant...")
@@ -88,6 +86,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     }
   }
 
+  /*
   def listeQuestionnaires(cid: Long) = Action { implicit request =>
     request.session.get("connected").map { user =>
       Server.userWithSurname(user) match {
@@ -98,18 +97,40 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
       Unauthorized("Accès non autorisé. Veuillez vous connecter !")
     }
   }
+  */
 
   def nouveauQuestionnaire(cid: Long) = Action { implicit request =>
     request.session.get("connected").map { user =>
       Server.userWithSurname(user) match {
-        case t: Some[Professor] => {
-          val theCourse = Server.getCourse(cid)
-          theCourse match {
-            case Some(aCourse) => Ok(views.html.newsurvey("Nouveau Questionnaire", true, t.get, aCourse))
-            case None => BadRequest("Cours non existant !")
+        case Some(u) => {
+          u match {
+            case p: Professor => {
+              val theCourse = Server.getCourse(cid)
+              theCourse match {
+                case Some(aCourse) => Ok(views.html.newsurvey("Nouveau Questionnaire", true, p, aCourse))
+                case None => BadRequest("Cours non existant !")
+              }
+            }
+            case s: Student => Unauthorized("Accès réservé aux professeurs !")
           }
         }
-        case s: Some[Student] => Unauthorized("Accès réservé aux professeurs !")
+        case None => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+      }
+    }.getOrElse {
+      Unauthorized("Accès non autorisé. Veuillez vous connecter !")
+    }
+  }
+
+  def afficheQuestionnaire(cid: Long, sid: Long) = Action { implicit request =>
+    request.session.get("connected").map { user =>
+      Server.userWithSurname(user) match {
+        case Some(userModel) => {
+          val survey = Server.getSurvey(cid, sid)
+          survey match {
+            case Some(s) => Ok(views.html.survey("Questionnaire", true, userModel, cid, s))
+            case None => BadRequest("Aucun questionnaire avec cet identifiant !")
+          }
+        }
         case _ => Unauthorized("Accès non autorisé. Veuillez vous connecter !")
       }
     }.getOrElse {
