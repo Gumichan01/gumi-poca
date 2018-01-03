@@ -11,9 +11,8 @@ trait ComparableAnswer[T]{
     def == (a: ComparableAnswer[T]) : Boolean
 }
 
-trait CheckableAnswer[T]{
+trait CheckableAnswer{
 
-    def content : T
     def check   : Boolean
 }
 
@@ -25,14 +24,13 @@ case class TextAnswer(text: String) extends Answer with ComparableAnswer[String]
     def == (a: ComparableAnswer[String]) = content == a.content
 }
 // Media Answer
-/*
-case class MediaAnswer(media: Media) extends Answer with CheckableAnswer[Media] {
+
+case class MediaAnswer(media: Media) extends Answer with CheckableAnswer {
 
     def check = {
         media match {
             case SourceCode(_) => true
-            case _ => false
+            case _             => false
         }
     }
 }
-*/
