@@ -22,6 +22,7 @@ abstract class Survey(questionl: List[Question]) {
 
     private val ids = Survey.getId
     def id : Int = ids
+    def numberOfQuestions: Int = questionl.size
 
     override def toString : String = {
       "Survey with id = " + id
@@ -56,7 +57,7 @@ case class MCSurvey(questionl: List[MultipleChoiceQuestion]) extends Survey(ques
 
             case (a, i)::q => {
 
-                val question = getQuestion(questionl, i)
+                val question = questionl.filter(_.id==i).head
                 check_(q, (if (question isGoodAnswer List(a)) (g + 1) else acc ))
             }
 

@@ -10,8 +10,9 @@ GET     /inscription.html           controllers.HomeController.inscription
 GET     /cours.html                 controllers.HomeController.cours
 GET     /cours/:cid.html            controllers.HomeController.coursSpecifique(cid: Long)
 GET     /newcours.html              controllers.HomeController.nouveauCours
-GET     /cours/:cid/surveys.html    controllers.HomeController.listeQuestionnaires(cid: Long)
+# GET     /cours/:cid/surveys.html    controllers.HomeController.listeQuestionnaires(cid: Long)
 GET     /cours/:cid/newsurvey.html  controllers.HomeController.nouveauQuestionnaire(cid: Long)
+GET     /cours/:cid/surveys/:sid.html   controllers.HomeController.afficheQuestionnaire(cid: Long, sid: Long)
 GET     /utilisateurs.html          controllers.HomeController.utilisateurs
 GET     /profil.html                controllers.HomeController.profil
 
@@ -38,6 +39,7 @@ GET     /api/suscribe/:cid          controllers.ApiController.suscribe(cid: Long
 # Questionnaires
 POST    /api/newsurvey              controllers.ApiController.newSurvey
 GET     /api/courses/:cid/surveys/all controllers.ApiController.listSurveys(cid: Long)
+POST    /api/answersheet            controllers.ApiController.submitAnswerSheet
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

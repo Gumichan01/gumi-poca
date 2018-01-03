@@ -89,6 +89,20 @@ object Server {
     }
   }
 
+  def getSurvey(cid: Long, sid: Long) : Option[Survey] = {
+    val course = getCourse(cid)
+    course match {
+      case Some(c) => {
+        val fs = c.getSurveys.filter(_.id == sid)
+        fs.size match {
+          case 1 => Some(fs.head)
+          case 0 => None
+        }
+      }
+      case None => None
+    }
+  }
+
   def studentSuscribes(cid: Long, surname: String) : Boolean = {
     (userWithSurname(surname)) match {
       case Some(user) => {

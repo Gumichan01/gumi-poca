@@ -19,7 +19,7 @@
 		<h1>Liste des utilisateurs</h1>
 		<div class="list-group">
 			@for(u <- allUsers) {
-				<a href="#" class="list-group-item list-group-item-action">@u.getName</a>
+				<a href="#" class="list-group-item list-group-item-action">@u.getName @u.getSurname</a>
 			}
 		</div>
 	</div>

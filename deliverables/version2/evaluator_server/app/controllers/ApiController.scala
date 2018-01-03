@@ -175,6 +175,51 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
     }
   }
 
+  def submitAnswerSheet = Action { implicit request =>
+    val fBody = request.body.asFormUrlEncoded.get
+    val courseIdOpt = fBody.get("courseId")
+    val surveyIdOpt = fBody.get("surveyId")
+
+    if (courseIdOpt == None || surveyIdOpt == None) {
+      BadRequest("Pas d'identifiants trouvés...")
+    } else {
+      val courseId = courseIdOpt.get.head
+      val surveyId = surveyIdOpt.get.head
+      val surveyOpt = Server.getSurvey(courseId.toLong, surveyId.toLong)
+      val surveyType = fBody.get("surveyType").get.head
+
+      surveyType match {
+        case "qcm" => {
+          if (surveyOpt != None) {
+            val numberOfQuestions = surveyOpt.get.numberOfQuestions
+            val sheet = new AnswerSheet(surveyId.toInt)
+            for (i <- 1 to numberOfQuestions) {
+              val currentAnswer = fBody.get("answer" + i).get
+              if (currentAnswer.size == 1) {
+                val t = TextAnswer(currentAnswer.head)
+                sheet.addAnswer(t, i)
+              } else {
+                for (ua <- currentAnswer) {
+                  val t = TextAnswer(ua)
+                  sheet.addAnswer(t, i)
+                }
+              }
+            }
+
+            val score = surveyOpt.get.asInstanceOf[MCSurvey].check(sheet)
+            val result = "Votre score : " + score + " / " + numberOfQuestions
+
+            Redirect("/cours/"+courseId+"/surveys/"+surveyId+".html").flashing("result" -> result)
+          }
+          else {
+            BadRequest("Aucun Questionnaire avec ces identifiants")
+          }
+        }
+        case "code" => BadRequest("Pas encore géré...")
+      }
+    }
+  }
+
   def interpretSurveyBody(body: Map[String, Seq[String]]) : Result = {
     var courseIdOpt = body.get("courseId")
     var questionsCount = 1
