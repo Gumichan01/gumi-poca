@@ -67,6 +67,12 @@ object BD {
     listC.foreach(_.displayCourse())
   }
   
+  def displayListCourseForStudent(id: Int) : List[String]={
+    var lc = List()
+    listC.foreach(f => if(f.containStudent(id)) f.getNameCourse()::lc)
+    return lc
+  }
+  
   def displaySurveyforCourse(c:Course)={
     c.displaySurvey()
   }
@@ -75,8 +81,9 @@ object BD {
     c.displayPoly()
   }
   
-  def CourseIsValide(c: String){
-    
+  def StringToCourse(c: String):Course={
+    listC.foreach(f => if(f.getNameCourse().equals(c)) return f)
+    return null
   }
   
 }

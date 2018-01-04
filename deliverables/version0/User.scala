@@ -146,7 +146,28 @@ class Student(n: String, sN: String) extends User(n,sN) {
         BD.displayListCourse();
         print("Votre choix:");
         var choix = Console.readLine();
-        
+        if(!BD.listCourse().contains(choix)){
+          println("Votre choix est invalide");
+        }
+        else {
+          var course = BD.StringToCourse(choix);
+          course.addStudent(id);
+        }
+      }
+      else if(input==3){
+        var lc = BD.displayListCourseForStudent(id);
+        if(lc.isEmpty) println("Liste est vide ");
+        println("Votre cours suivi: ");
+        lc.foreach(f => println(f))
+        print("Vous voulez déinscrire à quel cours: ")
+        var choix = Console.readLine();
+        if(!lc.contains(choix)){
+          println("Votre choix est invalide!");
+        }
+        else {
+          var course = BD.StringToCourse(choix);
+          course.removeStudent(id);
+        }
       }
       else if(input==6){
         valide = true;
