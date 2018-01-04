@@ -88,10 +88,11 @@ case class GSurvey(questionl: List[Question])
     def check(answer_sh: AnswerSheet) = {
 
         val acc = 0
-        check_(answer_sh.getAnswers, acc)
+        check_(answer_sh, answer_sh.getAnswers, acc)
     }
 
-    private def check_(answerl: List[(Answer, Int)], acc: Int): Int = {
+    // dirty code
+    private def check_(ansh: AnswerSheet, answerl: List[(Answer, Int)], acc: Int): Int = {
 
         val v = acc
 
@@ -103,15 +104,51 @@ case class GSurvey(questionl: List[Question])
 
                 question match {
                     case mcq: MultipleChoiceQuestion =>
-                        check_(q, (if (mcq isGoodAnswer List(a)) (v + 1) else acc))
+                        check_(ansh, q, (if (mcq isGoodAnswer List(a)) (v + 1) else acc))
 
                     case srcq: CodeSubmissionQuestion =>
-                        check_(q, (if (srcq check a) (v + 1) else acc))
+                        check_( ansh, q, ( v + ( checkSourceCode(srcq, ansh) ) ) )
                 }
             }
 
             case _ => acc
         } // match
+    }
+
+    private def checkSourceCode(q : CodeSubmissionQuestion,
+                                answer_sh : AnswerSheet) : Int = {
+
+        var score = 0
+
+        for (expectation <- q.ganswer) {
+            val file = new File("tmp/" + "sourceCodeQuestion" + id + ".py")
+            val bw = new BufferedWriter(new FileWriter(file))
+
+            var fileContent = "import sys\n\n"
+
+            val userAnswer = answer_sh.getAnswers.filter(_._2 == q.id)
+
+            fileContent += userAnswer.head._1.asInstanceOf[CodeAnswer].sourceCode
+            fileContent += "\n\n"
+
+            fileContent += "sys.exit("+ q.functionName + "(" + expectation._1 + "))"
+
+            bw.write(fileContent)
+            bw.close()
+
+            val resultCode = "python " + file.getAbsolutePath() !
+            val resultFormat = "python " + file.getAbsolutePath() lineStream_!
+
+            if (resultFormat.size > 0) {
+                println("ERROR MAYBE NO ?")
+            }
+
+            if (resultCode.toString == expectation._2) {
+                score += 1
+            }
+        }
+        // Return the score
+        score
     }
 }
 
@@ -125,7 +162,6 @@ case class CodeSurvey(questionl: List[SourceCodeQuestion]) extends Survey(questi
                 val bw = new BufferedWriter(new FileWriter(file))
 
                 var fileContent = "import sys\n\n"
-
                 val userAnswer = answer_sh.getAnswers.filter(_._2 == q.id)
 
                 fileContent += userAnswer.head._1.asInstanceOf[CodeAnswer].sourceCode
@@ -152,7 +188,7 @@ case class CodeSurvey(questionl: List[SourceCodeQuestion]) extends Survey(questi
         score
     }
 }
-
+/*
 object SMain {
 
     def main(args: Array[String]): Unit = {
@@ -199,3 +235,4 @@ object SMain {
     }
 
 }
+*/

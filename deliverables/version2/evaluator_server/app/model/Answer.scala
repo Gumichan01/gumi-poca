@@ -28,7 +28,6 @@ case class CodeAnswer(sourceCode: String, language: String = "Python") extends A
     def content = sourceCode
 }
 // Media Answer
-
 case class MediaAnswer(media: Media) extends Answer with CheckableAnswer {
 
     def check = {

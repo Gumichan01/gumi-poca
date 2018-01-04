@@ -55,36 +55,12 @@ case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], gansw
     // Methods
     def isGoodAnswer(a: List[Answer]): Boolean = a.toSet == ganswer.toSet
 }
-case class CodeSubmissionQuestion(sentence: String, tests: List[TestCase])
-    extends Question(sentence) with QuestionWithMedia {
 
-    def checkMedia(a: MediaAnswer) = {
+case class CodeSubmissionQuestion(sentence: String, functionName: String, ganswer: List[(String, String)])
+    extends Question(sentence)
 
-        a.media match {
-            case code: SourceCode => {
-                /// Execute the script with pyhon3
-                //val content = "python3 ".lineStream;
-                //for (c <- content)
-                    //println(c);
-
-                true
-            }
-            case _ =>
-        }
-
-        true
-    }
-
-    def check(a: Answer): Boolean = {
-
-        a match {
-            case ma: MediaAnswer => { checkMedia(ma) }
-            case _               => false
-        }
-    }
-}
-
-case class SourceCodeQuestion(sentence: String, functionName: String, ganswer: List[(String, String)]) extends Question(sentence)
+case class SourceCodeQuestion(sentence: String, functionName: String, ganswer: List[(String, String)])
+    extends Question(sentence)
 
 object QMain {
 
