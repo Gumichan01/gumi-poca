@@ -71,6 +71,7 @@ case class MCSurvey(questionl: List[MultipleChoiceQuestion])
     }
 }
 // Survey that can get any type of question
+// Unfortunately, it was not integrated in the website
 case class GSurvey(questionl: List[Question])
     extends Survey(questionl) with WithCheckableQA {
 
@@ -121,7 +122,7 @@ case class GSurvey(questionl: List[Question])
         var score = 0
 
         for (expectation <- q.ganswer) {
-            val file = new File("tmp/" + "sourceCodeQuestion" + id + ".py")
+            val file = new File("/tmp/" + "sourceCodeQuestion" + id + ".py")
             val bw = new BufferedWriter(new FileWriter(file))
 
             var fileContent = "import sys\n\n"
@@ -158,7 +159,7 @@ case class CodeSurvey(questionl: List[SourceCodeQuestion]) extends Survey(questi
 
         for (q <- questionl) {
             for (expectation <- q.ganswer) {
-                val file = new File("tmp/" + "sourceCodeQuestion" + id + ".py")
+                val file = new File("/tmp/" + "sourceCodeQuestion" + id + ".py")
                 val bw = new BufferedWriter(new FileWriter(file))
 
                 var fileContent = "import sys\n\n"
