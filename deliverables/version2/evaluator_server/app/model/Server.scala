@@ -34,10 +34,15 @@ object Server {
 
     val scq1 = new SourceCodeQuestion("Créez une fonction nommée 'fibo' qui prend en entrée un entier et retourne la valeur de la suite de Fibonnacci associée",
       "fibo",
-      ("7", "13")::("8", "21")::Nil
+      (("i", "7")::Nil,"13")::(("i", "8")::Nil,"21")::Nil
     )
 
-    val s2 : Survey = new CodeSurvey(scq1 :: Nil)
+    val scq2 = new SourceCodeQuestion("Créez une fonction nommée 'compteChar' qui prend en entrée 2 chaines de caractères et doit retourner combien de fois la seconde apparaît dans la première",
+      "compteChar",
+      (("s", "Scala")::("s", "la")::Nil,"1")::(("s", "baobab")::("s", "ba")::Nil,"2")::Nil
+    )
+
+    val s2 : Survey = new CodeSurvey(scq1 :: scq2 :: Nil)
 
     val course2 = new Course("Python", (s2::Nil), "Cours de Python<br />Testez vous en Python !", prof.getID, listStudents.map {_.getID})
 
