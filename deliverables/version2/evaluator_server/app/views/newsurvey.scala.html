@@ -70,7 +70,7 @@
 		var argumentsType = [];
 		
 		for (i = 0; i < argumentsCount; i++) {
-			var argType = prompt("Quel est le type de l'argument " + i+1 + " attendu ? (i pour Entier, f pour Flottant, s pour String, v pour void)");
+			var argType = prompt("Quel est le type de l'argument " + (i+1) + " attendu ? (i pour Entier, f pour Flottant, s pour String, v pour void)");
 			if (argType != null && argType != "" && (argType == "i" || argType == "f" || argType == "s")) {
 				argumentsType.push(argType);
 			}
@@ -103,7 +103,7 @@
 						<input type="hidden" id="hidden" name="${questionsCount+1}argumentsCount" value="${argumentsCount}">
 						<input type="hidden" id="hidden" name="${questionsCount+1}argumentsType" value="${argumentsType.join()}">
 						<input type="hidden" id="hidden" name="${questionsCount+1}funcReturnType" value="${funcReturnType}">
-						<input type="hidden" id="hidden" name="${questionsCount+1}expectationsCount" value="${expectationsCount}">
+							<input type="hidden" id="hidden" name="${questionsCount+1}expectationsCount" value="${expectationsCount}">
 						<label for="questionQuestion">Intitulé Question ${questionsCount+1}</label>
 						<input type="text" class="form-control" name="${questionsCount+1}questionQuestion" id="questionQuestion" aria-describedby="questionQuestionHelp" value="${intitule}">
 						<div class="list-group">

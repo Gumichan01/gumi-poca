@@ -27,6 +27,12 @@
 		Une erreur s'est produite. Veuillez réessayer !
 	</div>
 	}
+	
+	@if(flash.get("surveyRegistrationSuccess")) {
+	<div class="alert alert-success">
+		Le questionnaire a bien été enregistré !
+	</div>
+	}
 <div class="container-fluid">
 	<div class="jumbotron">
 		<h1>Cours @c.getName</h1>
