@@ -11,7 +11,7 @@ import scala.sys.process._
 object Qid {
 
     private var pqid: Int = 0
-    val _id: Int = { pqid = pqid + 1; pqid }
+    def _id: Int = { pqid = pqid + 1; pqid }
 }
 
 trait QuestionWithCheckablaAnswer {
