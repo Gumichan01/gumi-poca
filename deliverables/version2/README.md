@@ -4,7 +4,7 @@
 
 - Luxon JEAN-PIERRE (partie Back-End + modèle)
 - Duc Anh NGUYEN
-- Belaid LAGHA
+- Belaid LAGHA (backup + model)
 - Yves VIAUD - Serveur (API + Web App)
 
 ## Utilisation

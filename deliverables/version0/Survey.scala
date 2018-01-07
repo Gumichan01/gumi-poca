@@ -23,7 +23,7 @@ class Survey(questionl: List[Question]) {
 
         ql match {
             case Nil  => throw new Exception("hello")
-            case h::q => { if (h.id == id) h else getQuestion(ql,id) }
+            case h::q => { if (h.id == id) h else getQuestion(q,id) }
         }
     }
     

@@ -35,7 +35,7 @@ case class MCSurvey(questionl: List[MultipleChoiceQuestion]) extends Survey(ques
 
         ql match {
             case Nil  => throw new Exception("hello")
-            case h::q => { if (h.id == id) h else getQuestion(ql,id) }
+            case h::q => { if (h.id == id) h else getQuestion(q,id) }
         }
     }
 

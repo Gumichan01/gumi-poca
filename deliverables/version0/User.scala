@@ -15,7 +15,7 @@ abstract class User (n: String, sN: String) {
   def getName: String = name
   def getSurname: String = surName
   def setName(name: String) = {this.name = name}
-  def getSurname(sname: String) = {this.surName = surName}
+  def setSurname(sname: String) = {this.surName = sname}
   def changePassword(newPsw: String)={password = newPsw;}
   def display()={println(id+ "-" + name+" " + surName)}
 }
