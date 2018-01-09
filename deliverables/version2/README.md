@@ -3,7 +3,7 @@
 ## Equipe Group 8 et Répartition
 
 - Luxon JEAN-PIERRE (partie Back-End + modèle)
-- Duc Anh NGUYEN
+- Duc Anh NGUYEN (Course et User dans model)
 - Belaid LAGHA (backup + model)
 - Yves VIAUD - Serveur (API + Web App)
 
