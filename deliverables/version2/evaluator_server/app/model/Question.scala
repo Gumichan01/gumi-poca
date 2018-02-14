@@ -9,7 +9,6 @@ import sys.process._
 import scala.sys.process._
 
 object Qid {
-
     private var pqid: Int = 0
     def _id: Int = { pqid = pqid + 1; pqid }
 }
@@ -59,7 +58,7 @@ case class MultipleChoiceQuestion(sentence: String, answerl: List[Answer], gansw
 case class CodeSubmissionQuestion(sentence: String, functionName: String, ganswer: List[(String, String)])
     extends Question(sentence)
 
-case class SourceCodeQuestion(sentence: String, functionName: String, ganswer: List[(String, String)])
+case class SourceCodeQuestion(sentence: String, functionName: String, ganswer: List[(List[(String, String)], String)])
     extends Question(sentence)
 
 object QMain {

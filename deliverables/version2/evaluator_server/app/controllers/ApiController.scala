@@ -12,7 +12,6 @@ import play.api.libs.functional.syntax._
 import scala.collection.mutable.ListBuffer
 import model._
 
-
 // Course example class to test
 
 /*
@@ -273,8 +272,9 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
     var courseIdOpt = body.get("courseId")
     var questionsCount = 1
     var continueInterpreting = true
-    var allQuestions: List[Question] = Nil
+    var surveyType = "unknown"
     var allQcmQuestions: List[MultipleChoiceQuestion] = Nil
+    var allCodeQuestions: List[SourceCodeQuestion] = Nil
 
     // var allSourceCodeQuestions: List[]
 
@@ -291,6 +291,7 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
       } else {
         (questionType.get.head) match {
           case "qcm" => {
+            surveyType = "qcm"
             val possibilitiesCount = body.get(questionsCount + "qcmPossibilities").get.head.toInt
             val intitule = body.get(questionsCount + "questionQuestion").get.head
             var answers: List[Answer] = Nil
@@ -313,23 +314,67 @@ class ApiController @Inject()(cc: ControllerComponents) extends AbstractControll
             questionsCount += 1
           }
           case "code" => {
-            Ok("ok")
+            surveyType = "code"
+            val functionName = body.get(questionsCount + "functionName").get.head
+            val argumentsCount = body.get(questionsCount + "argumentsCount").get.head.toInt
+            val argumentsType = body.get(questionsCount + "argumentsType").get.head.split(",")
+            val funcRetType = body.get(questionsCount + "funcReturnType").get.head
+            val expectationsCount = body.get(questionsCount + "expectationsCount").get.head.toInt
+            val intitule = body.get(questionsCount + "questionQuestion").get.head
+
+            val expectations = body.get(questionsCount + "expectations").get.head.split(",")
+            val forArgs = body.get(questionsCount + "forArgs").get.head.split(",")
+
+            var answers: List[(List[(String, String)], String)] = Nil
+
+            for (i <- 1 to expectationsCount) {
+              var args: List[(String, String)] = Nil
+              val expect = expectations(i-1)
+              for (i <- 1 to argumentsCount) {
+                val argType = argumentsType(i-1)
+                val argValue = forArgs(i-1)
+                args = (argType, argValue) :: args
+              }
+              answers = (args,expect)::answers
+            }
+
+            val scq = new SourceCodeQuestion(intitule, functionName, answers)
+            allCodeQuestions = allCodeQuestions :+ scq
+
+            questionsCount += 1
           }
         }
       }
     }
 
-    val survey = MCSurvey(allQcmQuestions)
-    Server.addSurvey(survey)
+    surveyType match {
+      case "qcm" => {
+        val survey = MCSurvey(allQcmQuestions)
+        Server.addSurvey(survey)
 
-    val course = Server.getCourse(courseId.toLong)
+        val course = Server.getCourse(courseId.toLong)
 
-    course match {
-      case Some(c) => p.addQuestionnaire(survey, c)
-      case None => BadRequest("Pas de cours associé")
+        course match {
+          case Some(c) => p.addQuestionnaire(survey, c)
+          case None => BadRequest("Pas de cours associé")
+        }
+
+        Redirect("/cours/" + courseId + ".html").flashing("surveyRegistrationSuccess" -> "true")
+      }
+      case "code" => {
+        val survey = CodeSurvey(allCodeQuestions)
+        Server.addSurvey(survey)
+
+        val course = Server.getCourse(courseId.toLong)
+
+        course match {
+          case Some(c) => p.addQuestionnaire(survey, c)
+          case None => BadRequest("Pas de cours associé")
+        }
+
+        Redirect("/cours/" + courseId + ".html").flashing("surveyRegistrationSuccess" -> "true")
+      }
     }
-
-    Redirect("/cours/" + courseId + ".html")
   }
 
   def listSurveys(cid: Long) = Action {

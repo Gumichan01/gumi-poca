@@ -168,7 +168,19 @@ case class CodeSurvey(questionl: List[SourceCodeQuestion]) extends Survey(questi
                 fileContent += userAnswer.head._1.asInstanceOf[CodeAnswer].sourceCode
                 fileContent += "\n\n"
 
-                fileContent += "sys.exit("+ q.functionName + "(" + expectation._1 + "))"
+                fileContent += "sys.exit(" + q.functionName + "("
+
+                for (param <- expectation._1) {
+                    param._1 match {
+                        case "i" => fileContent += param._2 + ","
+                        case "f" => fileContent += param._2 + ","
+                        case "s" => fileContent += """"""" + param._2 + """","""
+                        case _ => println("Unhandled argument type")
+                    }
+                }
+
+                fileContent = fileContent.dropRight(1)
+                fileContent += "))"
 
                 bw.write(fileContent)
                 bw.close()
